@@ -1,0 +1,712 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="SNS.Apps.KPC.Libs.Models.DataStores" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="tbl_User_Rate">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserID" Type="Int64" Nullable="false" />
+    <Property Name="GoodCount" Type="Int32" />
+    <Property Name="BadCount" Type="Int32" />
+    <Property Name="CreateDate" Type="DateTime" Precision="0" />
+    <Property Name="UpdateDate" Type="DateTime" Precision="0" />
+  </EntityType>
+  <EntityContainer Name="DataModels" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="tbl_User_Rate" EntityType="Self.tbl_User_Rate" />
+    <FunctionImport Name="sp_Admin_LoadAvailableRoutes" ReturnType="Collection(SNS.Apps.KPC.Libs.Models.DataStores.sp_Admin_LoadAvailableRoutes_Result)">
+      <Parameter Name="dtStartDate" Mode="In" Type="DateTime" />
+      <Parameter Name="dtEndDate" Mode="In" Type="DateTime" />
+    </FunctionImport>
+    <FunctionImport Name="sp_Sync_CancelRoute">
+      <Parameter Name="rID" Mode="In" Type="Int64" />
+      <Parameter Name="rStatus" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <EntitySet Name="tbl_User_Route" EntityType="SNS.Apps.KPC.Libs.Models.DataStores.tbl_User_Route" />
+    <FunctionImport Name="sp_Get_Latest_RouteID_By_UserGUID" ReturnType="Collection(Int64)">
+      <Parameter Name="userGUID" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="sp_Sync_ExpireRoute">
+      <Parameter Name="routeIDs" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="sp_Sync_AcquireRoute">
+      <Parameter Name="routeID" Mode="In" Type="Int64" />
+      <Parameter Name="acquireID" Mode="In" Type="Int64" />
+      <Parameter Name="acquireAction" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_Set_UserTrack">
+      <Parameter Name="userID" Mode="In" Type="Int64" />
+      <Parameter Name="routeID" Mode="In" Type="Int64" />
+      <Parameter Name="lng" Mode="In" Type="Double" />
+      <Parameter Name="lat" Mode="In" Type="Double" />
+    </FunctionImport>
+    <EntitySet Name="tbl_User_Comment" EntityType="SNS.Apps.KPC.Libs.Models.DataStores.tbl_User_Comment" />
+    <FunctionImport Name="sp_Load_Available_Routes" ReturnType="Collection(SNS.Apps.KPC.Libs.Models.DataStores.sp_Load_Available_Routes_Result)" />
+    <FunctionImport Name="sp_Load_Available_UserTracks" ReturnType="Collection(SNS.Apps.KPC.Libs.Models.DataStores.sp_Load_Available_UserTracks_Result)">
+      <Parameter Name="userRole" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_Set_PhoneVerifyCode">
+      <Parameter Name="phoneNum" Mode="In" Type="String" />
+      <Parameter Name="code" Mode="In" Type="String" />
+      <Parameter Name="channel" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_Set_PromotionUser" ReturnType="Collection(SNS.Apps.KPC.Libs.Models.DataStores.sp_Set_PromotionUser_Result)">
+      <Parameter Name="userID" Mode="In" Type="Int64" />
+      <Parameter Name="code" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <EntitySet Name="tbl_User_Import" EntityType="SNS.Apps.KPC.Libs.Models.DataStores.tbl_User_Import" />
+    <FunctionImport Name="sp_Set_Route_Status">
+      <Parameter Name="routeID" Mode="In" Type="Int64" />
+      <Parameter Name="status" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <EntitySet Name="tbl_User_Order" EntityType="SNS.Apps.KPC.Libs.Models.DataStores.tbl_User_Order" />
+    <EntitySet Name="tbl_Route" EntityType="SNS.Apps.KPC.Libs.Models.DataStores.tbl_Route" />
+    <FunctionImport Name="sp_Load_UserOrder_By_UserID">
+      <Parameter Name="userID" Mode="In" Type="Int64" />
+      <Parameter Name="orderType" Mode="In" Type="Int32" />
+      <Parameter Name="orderStatus" Mode="In" Type="Int32" />
+      <Parameter Name="page" Mode="In" Type="Int32" />
+      <Parameter Name="count" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_Load_Available_RouteIDs" ReturnType="Collection(Int64)" />
+    <FunctionImport Name="sp_Load_RouteMatrix_By_RouteIDs" ReturnType="Collection(SNS.Apps.KPC.Libs.Models.DataStores.sp_Load_RouteMatrix_By_RouteIDs_Result)">
+      <Parameter Name="routeIDs" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="sp_Check_PhoneVerifyCode" ReturnType="Collection(Int32)">
+      <Parameter Name="phoneNum" Mode="In" Type="String" />
+      <Parameter Name="code" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="sp_Load_UserRoute_By_RouteID" ReturnType="Collection(SNS.Apps.KPC.Libs.Models.DataStores.sp_Load_UserRoute_By_RouteID_Result)">
+      <Parameter Name="routeID" Mode="In" Type="Int64" />
+    </FunctionImport>
+    <FunctionImport Name="sp_Load_UserRoute_By_RouteIDs" ReturnType="Collection(SNS.Apps.KPC.Libs.Models.DataStores.sp_Load_UserRoute_By_RouteIDs_Result)">
+      <Parameter Name="routeIDs" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="sp_Load_UserRoute_By_UserID" ReturnType="Collection(SNS.Apps.KPC.Libs.Models.DataStores.sp_Load_UserRoute_By_UserID_Result)">
+      <Parameter Name="userID" Mode="In" Type="Int64" />
+      <Parameter Name="page" Mode="In" Type="Int32" />
+      <Parameter Name="count" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_Load_UserRoute_Newest" ReturnType="Collection(SNS.Apps.KPC.Libs.Models.DataStores.sp_Load_UserRoute_Newest_Result)">
+      <Parameter Name="city" Mode="In" Type="String" />
+      <Parameter Name="page" Mode="In" Type="Int32" />
+      <Parameter Name="count" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_Get_PromotionCode" ReturnType="Collection(SNS.Apps.KPC.Libs.Models.DataStores.sp_Get_PromotionCode_Result)">
+      <Parameter Name="userID" Mode="In" Type="Int64" />
+      <Parameter Name="channelID" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_Get_PromotionCount" ReturnType="Collection(SNS.Apps.KPC.Libs.Models.DataStores.sp_Get_PromotionCount_Result)">
+      <Parameter Name="userID" Mode="In" Type="Int64" />
+    </FunctionImport>
+    <FunctionImport Name="sp_Load_Promoters" ReturnType="Collection(SNS.Apps.KPC.Libs.Models.DataStores.sp_Load_Promoters_Result)" />
+    <FunctionImport Name="sp_Load_UserRoute_Newest_Disp" ReturnType="Collection(SNS.Apps.KPC.Libs.Models.DataStores.sp_Load_UserRoute_Newest_Disp_Result)">
+      <Parameter Name="city" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="sp_Sync_UserOrder_Status" />
+    <EntitySet Name="tbl_User_Payment" EntityType="SNS.Apps.KPC.Libs.Models.DataStores.tbl_User_Payment" />
+    <FunctionImport Name="sp_Load_PromotionUsers" ReturnType="Collection(SNS.Apps.KPC.Libs.Models.DataStores.sp_Load_PromotionUsers_Result)">
+      <Parameter Name="userID" Mode="In" Type="Int64" />
+      <Parameter Name="maxCount" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <EntitySet Name="tbl_User" EntityType="SNS.Apps.KPC.Libs.Models.DataStores.tbl_User" />
+    <EntitySet Name="tbl_Common_PhoneVerify" EntityType="SNS.Apps.KPC.Libs.Models.DataStores.tbl_Common_PhoneVerify" />
+    <EntitySet Name="tbl_Common_City" EntityType="SNS.Apps.KPC.Libs.Models.DataStores.tbl_Common_City" />
+    <EntitySet Name="tbl_Common_Province" EntityType="SNS.Apps.KPC.Libs.Models.DataStores.tbl_Common_Province" />
+    <EntitySet Name="tbl_User_External" EntityType="SNS.Apps.KPC.Libs.Models.DataStores.tbl_User_External" />
+    <EntitySet Name="tbl_User_Insurance" EntityType="SNS.Apps.KPC.Libs.Models.DataStores.tbl_User_Insurance" />
+    <FunctionImport Name="sp_Get_UserInsuranceFolio" ReturnType="Collection(String)" />
+    <FunctionImport Name="sp_Get_UserOrderFolio" ReturnType="Collection(String)" />
+    <EntitySet Name="tbl_User_Order_Insurance" EntityType="SNS.Apps.KPC.Libs.Models.DataStores.tbl_User_Order_Insurance" />
+    <EntitySet Name="tbl_User_Promotion" EntityType="SNS.Apps.KPC.Libs.Models.DataStores.tbl_User_Promotion" />
+    <EntitySet Name="tbl_User_Track" EntityType="SNS.Apps.KPC.Libs.Models.DataStores.tbl_User_Track" />
+  </EntityContainer>
+  <ComplexType Name="sp_Admin_LoadAvailableRoutes_Result">
+    <Property Type="Int64" Name="ID" Nullable="false" />
+    <Property Type="String" Name="RouteGUID" Nullable="false" MaxLength="50" />
+    <Property Type="DateTime" Name="CreateDate" Nullable="true" Precision="16" />
+    <Property Type="DateTime" Name="StartDate" Nullable="true" Precision="16" />
+    <Property Type="String" Name="From_Province" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="From_City" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="From_District" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="From_Location" Nullable="true" MaxLength="300" />
+    <Property Type="String" Name="To_Province" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="To_City" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="To_District" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="To_Location" Nullable="true" MaxLength="300" />
+    <Property Type="Int32" Name="RepeatType" Nullable="true" />
+    <Property Type="Int32" Name="RepeatCondition" Nullable="true" />
+    <Property Type="Int32" Name="Status" Nullable="true" />
+    <Property Type="String" Name="UserGUID" Nullable="false" MaxLength="50" />
+    <Property Type="String" Name="NickName" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="Mobile" Nullable="true" MaxLength="50" />
+    <Property Type="Int32" Name="UserRole" Nullable="false" />
+  </ComplexType>
+  <EntityType Name="tbl_User_Route">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserID" Type="Int64" Nullable="false" />
+    <Property Name="UserRole" Type="Int32" Nullable="false" />
+    <Property Name="RouteID" Type="Int64" Nullable="false" />
+  </EntityType>
+  <EntityType Name="tbl_User_Comment">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserID" Type="Int64" Nullable="false" />
+    <Property Name="RouteID" Type="Int64" Nullable="false" />
+    <Property Name="ScoreBy" Type="Int64" Nullable="false" />
+    <Property Name="ScoreRate" Type="Int32" />
+    <Property Name="Comments" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+    <Property Name="CreateDate" Type="DateTime" Precision="0" />
+  </EntityType>
+  <ComplexType Name="sp_Load_Available_Routes_Result">
+    <Property Type="Int64" Name="UserID" Nullable="false" />
+    <Property Type="Int32" Name="UserRole" Nullable="false" />
+    <Property Type="Int64" Name="ID" Nullable="false" />
+    <Property Type="String" Name="RouteGUID" Nullable="false" MaxLength="50" />
+    <Property Type="Int32" Name="RouteType" Nullable="true" />
+    <Property Type="String" Name="From_Province" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="From_City" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="From_District" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="From_Location" Nullable="true" MaxLength="300" />
+    <Property Type="Double" Name="From_Longitude" Nullable="true" />
+    <Property Type="Double" Name="From_Latitude" Nullable="true" />
+    <Property Type="String" Name="To_Province" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="To_City" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="To_District" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="To_Location" Nullable="true" MaxLength="300" />
+    <Property Type="Double" Name="To_Longitude" Nullable="true" />
+    <Property Type="Double" Name="To_Latitude" Nullable="true" />
+    <Property Type="DateTime" Name="StartDate" Nullable="true" Precision="16" />
+    <Property Type="Int32" Name="RepeatType" Nullable="true" />
+    <Property Type="Int32" Name="RepeatCondition" Nullable="true" />
+    <Property Type="DateTime" Name="EndDate" Nullable="true" Precision="16" />
+    <Property Type="Double" Name="Distance" Nullable="true" />
+    <Property Type="Decimal" Name="Charge" Nullable="true" Precision="18" Scale="2" />
+    <Property Type="Int32" Name="SeatCount" Nullable="true" />
+    <Property Type="String" Name="Note" Nullable="true" MaxLength="300" />
+    <Property Type="Boolean" Name="IsExpired" Nullable="true" />
+    <Property Type="Boolean" Name="IsLongTerm" Nullable="true" />
+    <Property Type="Int32" Name="Status" Nullable="true" />
+    <Property Type="DateTime" Name="CreateDate" Nullable="true" Precision="16" />
+    <Property Type="DateTime" Name="UpdateDate" Nullable="true" Precision="16" />
+  </ComplexType>
+  <ComplexType Name="sp_Load_Available_UserTracks_Result">
+    <Property Type="Int64" Name="ID" Nullable="false" />
+    <Property Type="Int64" Name="UserID" Nullable="true" />
+    <Property Type="Double" Name="Longitude" Nullable="true" />
+    <Property Type="Double" Name="Latitude" Nullable="true" />
+    <Property Type="DateTime" Name="CreateDate" Nullable="true" Precision="16" />
+    <Property Type="DateTime" Name="UpdateDate" Nullable="true" Precision="16" />
+  </ComplexType>
+  <ComplexType Name="sp_Set_PromotionUser_Result">
+    <Property Type="Int32" Name="Status" Nullable="false" />
+    <Property Type="Int64" Name="ID" Nullable="true" />
+    <Property Type="String" Name="OpenID" Nullable="true" />
+    <Property Type="String" Name="UserGUID" Nullable="true" />
+    <Property Type="String" Name="NickName" Nullable="true" />
+  </ComplexType>
+  <EntityType Name="tbl_User_Import">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserGUID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="NickName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Gender" Type="Boolean" />
+    <Property Name="Mobile" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="UserRole" Type="Int32" />
+    <Property Name="PortraitsUrl" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+    <Property Name="PortraitsThumbUrl" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+    <Property Name="IsImported" Type="Boolean" />
+    <Property Name="CreateDate" Type="DateTime" Precision="0" />
+    <Property Name="UpdateDate" Type="DateTime" Precision="0" />
+  </EntityType>
+  <EntityType Name="tbl_User_Order">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Folio" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="RequestorID" Type="Int64" Nullable="false" />
+    <Property Name="RequestorRole" Type="Int32" Nullable="false" />
+    <Property Name="SupplierID" Type="Int64" Nullable="false" />
+    <Property Name="SupplierRole" Type="Int32" Nullable="false" />
+    <Property Name="RouteID" Type="Int64" Nullable="false" />
+    <Property Name="StartDate" Type="DateTime" Precision="0" />
+    <Property Name="Charge" Type="Decimal" Precision="18" Scale="0" />
+    <Property Name="Note" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+    <Property Name="IsConfirmed_Requestor" Type="Boolean" />
+    <Property Name="IsConfirmed_Supplier" Type="Boolean" />
+    <Property Name="IsCancelled_Requestor" Type="Boolean" />
+    <Property Name="IsCancelled_Supplier" Type="Boolean" />
+    <Property Name="Status" Type="Int32" />
+    <Property Name="CreateDate" Type="DateTime" Precision="0" />
+    <Property Name="UpdateDate" Type="DateTime" Precision="0" />
+  </EntityType>
+  <EntityType Name="tbl_Route">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="RouteGUID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="RouteType" Type="Int32" />
+    <Property Name="From_Province" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="From_City" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="From_District" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="From_Location" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+    <Property Name="From_Longitude" Type="Double" />
+    <Property Name="From_Latitude" Type="Double" />
+    <Property Name="To_Province" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="To_City" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="To_District" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="To_Location" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+    <Property Name="To_Longitude" Type="Double" />
+    <Property Name="To_Latitude" Type="Double" />
+    <Property Name="StartDate" Type="DateTime" Precision="0" />
+    <Property Name="RepeatType" Type="Int32" />
+    <Property Name="RepeatCondition" Type="Int32" />
+    <Property Name="EndDate" Type="DateTime" Precision="0" />
+    <Property Name="Distance" Type="Double" />
+    <Property Name="Charge" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="SeatCount" Type="Int32" />
+    <Property Name="Note" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+    <Property Name="IsExpired" Type="Boolean" />
+    <Property Name="IsLongTerm" Type="Boolean" />
+    <Property Name="Status" Type="Int32" />
+    <Property Name="CreateDate" Type="DateTime" Precision="0" />
+    <Property Name="UpdateDate" Type="DateTime" Precision="0" />
+  </EntityType>
+  <ComplexType Name="sp_Load_RouteMatrix_By_RouteIDs_Result">
+    <Property Type="Int64" Name="RouteID" Nullable="false" />
+    <Property Type="Int64" Name="MatrixID" Nullable="false" />
+    <Property Type="Double" Name="Rate_DateTime" Nullable="true" />
+    <Property Type="Double" Name="Rate_Distance" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="sp_Load_UserRoute_By_RouteID_Result">
+    <Property Type="Int64" Name="UserID" Nullable="true" />
+    <Property Type="String" Name="UserOpenID" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="UserGUID" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="User_NickName" Nullable="true" MaxLength="50" />
+    <Property Type="Boolean" Name="User_Gender" Nullable="true" />
+    <Property Type="String" Name="User_Mobile" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="User_WeChatID" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="User_LicencePlateNumber" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="User_PortraitsUrl" Nullable="true" MaxLength="300" />
+    <Property Type="String" Name="User_PortraitsThumbUrl" Nullable="true" MaxLength="300" />
+    <Property Type="DateTime" Name="User_CreateDate" Nullable="true" Precision="16" />
+    <Property Type="DateTime" Name="User_UpdateDate" Nullable="true" Precision="16" />
+    <Property Type="Int32" Name="User_Status" Nullable="true" />
+    <Property Type="Boolean" Name="User_IsExtended" Nullable="true" />
+    <Property Type="Int64" Name="RouteID" Nullable="false" />
+    <Property Type="String" Name="RouteGUID" Nullable="false" MaxLength="50" />
+    <Property Type="Int32" Name="RouteType" Nullable="true" />
+    <Property Type="String" Name="From_Province" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="From_City" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="From_District" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="From_Location" Nullable="true" MaxLength="300" />
+    <Property Type="Double" Name="From_Longitude" Nullable="true" />
+    <Property Type="Double" Name="From_Latitude" Nullable="true" />
+    <Property Type="String" Name="To_Province" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="To_City" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="To_District" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="To_Location" Nullable="true" MaxLength="300" />
+    <Property Type="Double" Name="To_Longitude" Nullable="true" />
+    <Property Type="Double" Name="To_Latitude" Nullable="true" />
+    <Property Type="DateTime" Name="StartDate" Nullable="true" Precision="16" />
+    <Property Type="Int32" Name="RepeatType" Nullable="true" />
+    <Property Type="Int32" Name="RepeatCondition" Nullable="true" />
+    <Property Type="DateTime" Name="EndDate" Nullable="true" Precision="16" />
+    <Property Type="Double" Name="Distance" Nullable="true" />
+    <Property Type="Decimal" Name="Charge" Nullable="true" Precision="18" Scale="2" />
+    <Property Type="Int32" Name="SeatCount" Nullable="true" />
+    <Property Type="String" Name="Note" Nullable="true" MaxLength="300" />
+    <Property Type="DateTime" Name="Route_CreateDate" Nullable="true" Precision="16" />
+    <Property Type="DateTime" Name="Route_UpdateDate" Nullable="true" Precision="16" />
+    <Property Type="Boolean" Name="Route_IsExpired" Nullable="true" />
+    <Property Type="Boolean" Name="Route_IsLongTerm" Nullable="true" />
+    <Property Type="Int32" Name="Route_Status" Nullable="true" />
+    <Property Type="Int32" Name="UserRole" Nullable="false" />
+  </ComplexType>
+  <ComplexType Name="sp_Load_UserRoute_By_RouteIDs_Result">
+    <Property Type="Int64" Name="UserID" Nullable="true" />
+    <Property Type="String" Name="UserOpenID" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="UserGUID" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="User_NickName" Nullable="true" MaxLength="50" />
+    <Property Type="Boolean" Name="User_Gender" Nullable="true" />
+    <Property Type="String" Name="User_Mobile" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="User_WeChatID" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="User_LicencePlateNumber" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="User_PortraitsUrl" Nullable="true" MaxLength="300" />
+    <Property Type="String" Name="User_PortraitsThumbUrl" Nullable="true" MaxLength="300" />
+    <Property Type="DateTime" Name="User_CreateDate" Nullable="true" Precision="16" />
+    <Property Type="DateTime" Name="User_UpdateDate" Nullable="true" Precision="16" />
+    <Property Type="Int32" Name="User_Status" Nullable="true" />
+    <Property Type="Boolean" Name="User_IsExtended" Nullable="true" />
+    <Property Type="Int64" Name="RouteID" Nullable="false" />
+    <Property Type="String" Name="RouteGUID" Nullable="false" MaxLength="50" />
+    <Property Type="Int32" Name="RouteType" Nullable="true" />
+    <Property Type="String" Name="From_Province" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="From_City" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="From_District" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="From_Location" Nullable="true" MaxLength="300" />
+    <Property Type="Double" Name="From_Longitude" Nullable="true" />
+    <Property Type="Double" Name="From_Latitude" Nullable="true" />
+    <Property Type="String" Name="To_Province" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="To_City" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="To_District" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="To_Location" Nullable="true" MaxLength="300" />
+    <Property Type="Double" Name="To_Longitude" Nullable="true" />
+    <Property Type="Double" Name="To_Latitude" Nullable="true" />
+    <Property Type="DateTime" Name="StartDate" Nullable="true" Precision="16" />
+    <Property Type="Int32" Name="RepeatType" Nullable="true" />
+    <Property Type="Int32" Name="RepeatCondition" Nullable="true" />
+    <Property Type="DateTime" Name="EndDate" Nullable="true" Precision="16" />
+    <Property Type="Double" Name="Distance" Nullable="true" />
+    <Property Type="Decimal" Name="Charge" Nullable="true" Precision="18" Scale="2" />
+    <Property Type="Int32" Name="SeatCount" Nullable="true" />
+    <Property Type="String" Name="Note" Nullable="true" MaxLength="300" />
+    <Property Type="DateTime" Name="Route_CreateDate" Nullable="true" Precision="16" />
+    <Property Type="DateTime" Name="Route_UpdateDate" Nullable="true" Precision="16" />
+    <Property Type="Boolean" Name="Route_IsExpired" Nullable="true" />
+    <Property Type="Boolean" Name="Route_IsLongTerm" Nullable="true" />
+    <Property Type="Int32" Name="Route_Status" Nullable="true" />
+    <Property Type="Int32" Name="UserRole" Nullable="false" />
+  </ComplexType>
+  <ComplexType Name="sp_Load_UserRoute_By_UserID_Result">
+    <Property Type="Int64" Name="UserID" Nullable="false" />
+    <Property Type="String" Name="UserOpenID" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="UserGUID" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="User_NickName" Nullable="true" MaxLength="50" />
+    <Property Type="Boolean" Name="User_Gender" Nullable="true" />
+    <Property Type="String" Name="User_Mobile" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="User_WeChatID" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="User_LicencePlateNumber" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="User_PortraitsUrl" Nullable="true" MaxLength="300" />
+    <Property Type="String" Name="User_PortraitsThumbUrl" Nullable="true" MaxLength="300" />
+    <Property Type="DateTime" Name="User_CreateDate" Nullable="true" Precision="16" />
+    <Property Type="DateTime" Name="User_UpdateDate" Nullable="true" Precision="16" />
+    <Property Type="Int32" Name="User_Status" Nullable="true" />
+    <Property Type="Boolean" Name="User_IsExtended" Nullable="true" />
+    <Property Type="Int64" Name="RouteID" Nullable="false" />
+    <Property Type="String" Name="RouteGUID" Nullable="false" MaxLength="50" />
+    <Property Type="Int32" Name="RouteType" Nullable="true" />
+    <Property Type="String" Name="From_Province" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="From_City" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="From_District" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="From_Location" Nullable="true" MaxLength="300" />
+    <Property Type="Double" Name="From_Longitude" Nullable="true" />
+    <Property Type="Double" Name="From_Latitude" Nullable="true" />
+    <Property Type="String" Name="To_Province" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="To_City" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="To_District" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="To_Location" Nullable="true" MaxLength="300" />
+    <Property Type="Double" Name="To_Longitude" Nullable="true" />
+    <Property Type="Double" Name="To_Latitude" Nullable="true" />
+    <Property Type="DateTime" Name="StartDate" Nullable="true" Precision="16" />
+    <Property Type="Int32" Name="RepeatType" Nullable="true" />
+    <Property Type="Int32" Name="RepeatCondition" Nullable="true" />
+    <Property Type="DateTime" Name="EndDate" Nullable="true" Precision="16" />
+    <Property Type="Double" Name="Distance" Nullable="true" />
+    <Property Type="Decimal" Name="Charge" Nullable="true" Precision="18" Scale="2" />
+    <Property Type="Int32" Name="SeatCount" Nullable="true" />
+    <Property Type="String" Name="Note" Nullable="true" MaxLength="300" />
+    <Property Type="DateTime" Name="Route_CreateDate" Nullable="true" Precision="16" />
+    <Property Type="DateTime" Name="Route_UpdateDate" Nullable="true" Precision="16" />
+    <Property Type="Boolean" Name="Route_IsExpired" Nullable="true" />
+    <Property Type="Boolean" Name="Route_IsLongTerm" Nullable="true" />
+    <Property Type="Int32" Name="Route_Status" Nullable="true" />
+    <Property Type="Int32" Name="UserRole" Nullable="false" />
+  </ComplexType>
+  <ComplexType Name="sp_Load_UserRoute_Newest_Result">
+    <Property Type="Int64" Name="UserID" Nullable="false" />
+    <Property Type="String" Name="UserOpenID" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="UserGUID" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="User_NickName" Nullable="true" MaxLength="50" />
+    <Property Type="Boolean" Name="User_Gender" Nullable="true" />
+    <Property Type="String" Name="User_Mobile" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="User_WeChatID" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="User_LicencePlateNumber" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="User_PortraitsUrl" Nullable="true" MaxLength="300" />
+    <Property Type="String" Name="User_PortraitsThumbUrl" Nullable="true" MaxLength="300" />
+    <Property Type="DateTime" Name="User_CreateDate" Nullable="true" Precision="16" />
+    <Property Type="DateTime" Name="User_UpdateDate" Nullable="true" Precision="16" />
+    <Property Type="Int32" Name="User_Status" Nullable="true" />
+    <Property Type="Boolean" Name="User_IsExtended" Nullable="true" />
+    <Property Type="Int64" Name="RouteID" Nullable="false" />
+    <Property Type="String" Name="RouteGUID" Nullable="false" MaxLength="50" />
+    <Property Type="Int32" Name="RouteType" Nullable="true" />
+    <Property Type="String" Name="From_Province" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="From_City" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="From_District" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="From_Location" Nullable="true" MaxLength="300" />
+    <Property Type="Double" Name="From_Longitude" Nullable="true" />
+    <Property Type="Double" Name="From_Latitude" Nullable="true" />
+    <Property Type="String" Name="To_Province" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="To_City" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="To_District" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="To_Location" Nullable="true" MaxLength="300" />
+    <Property Type="Double" Name="To_Longitude" Nullable="true" />
+    <Property Type="Double" Name="To_Latitude" Nullable="true" />
+    <Property Type="DateTime" Name="StartDate" Nullable="true" Precision="16" />
+    <Property Type="Int32" Name="RepeatType" Nullable="true" />
+    <Property Type="Int32" Name="RepeatCondition" Nullable="true" />
+    <Property Type="DateTime" Name="EndDate" Nullable="true" Precision="16" />
+    <Property Type="Double" Name="Distance" Nullable="true" />
+    <Property Type="Decimal" Name="Charge" Nullable="true" Precision="18" Scale="2" />
+    <Property Type="Int32" Name="SeatCount" Nullable="true" />
+    <Property Type="String" Name="Note" Nullable="true" MaxLength="300" />
+    <Property Type="DateTime" Name="Route_CreateDate" Nullable="true" Precision="16" />
+    <Property Type="DateTime" Name="Route_UpdateDate" Nullable="true" Precision="16" />
+    <Property Type="Boolean" Name="Route_IsExpired" Nullable="true" />
+    <Property Type="Boolean" Name="Route_IsLongTerm" Nullable="true" />
+    <Property Type="Int32" Name="Route_Status" Nullable="true" />
+    <Property Type="Int32" Name="UserRole" Nullable="false" />
+  </ComplexType>
+  <ComplexType Name="sp_Load_UserRoute_Newest_Disp_Result">
+    <Property Type="Int64" Name="UserID" Nullable="false" />
+    <Property Type="String" Name="UserOpenID" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="UserGUID" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="User_NickName" Nullable="true" MaxLength="50" />
+    <Property Type="Boolean" Name="User_Gender" Nullable="true" />
+    <Property Type="String" Name="User_Mobile" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="User_WeChatID" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="User_LicencePlateNumber" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="User_PortraitsUrl" Nullable="true" MaxLength="300" />
+    <Property Type="String" Name="User_PortraitsThumbUrl" Nullable="true" MaxLength="300" />
+    <Property Type="DateTime" Name="User_CreateDate" Nullable="true" Precision="16" />
+    <Property Type="DateTime" Name="User_UpdateDate" Nullable="true" Precision="16" />
+    <Property Type="Int32" Name="User_Status" Nullable="true" />
+    <Property Type="Boolean" Name="User_IsExtended" Nullable="true" />
+    <Property Type="Int64" Name="RouteID" Nullable="false" />
+    <Property Type="String" Name="RouteGUID" Nullable="false" MaxLength="50" />
+    <Property Type="Int32" Name="RouteType" Nullable="true" />
+    <Property Type="String" Name="From_Province" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="From_City" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="From_District" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="From_Location" Nullable="true" MaxLength="300" />
+    <Property Type="Double" Name="From_Longitude" Nullable="true" />
+    <Property Type="Double" Name="From_Latitude" Nullable="true" />
+    <Property Type="String" Name="To_Province" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="To_City" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="To_District" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="To_Location" Nullable="true" MaxLength="300" />
+    <Property Type="Double" Name="To_Longitude" Nullable="true" />
+    <Property Type="Double" Name="To_Latitude" Nullable="true" />
+    <Property Type="DateTime" Name="StartDate" Nullable="true" Precision="16" />
+    <Property Type="Int32" Name="RepeatType" Nullable="true" />
+    <Property Type="Int32" Name="RepeatCondition" Nullable="true" />
+    <Property Type="DateTime" Name="EndDate" Nullable="true" Precision="16" />
+    <Property Type="Double" Name="Distance" Nullable="true" />
+    <Property Type="Decimal" Name="Charge" Nullable="true" Precision="18" Scale="2" />
+    <Property Type="Int32" Name="SeatCount" Nullable="true" />
+    <Property Type="String" Name="Note" Nullable="true" MaxLength="300" />
+    <Property Type="DateTime" Name="Route_CreateDate" Nullable="true" Precision="16" />
+    <Property Type="DateTime" Name="Route_UpdateDate" Nullable="true" Precision="16" />
+    <Property Type="Boolean" Name="Route_IsExpired" Nullable="true" />
+    <Property Type="Boolean" Name="Route_IsLongTerm" Nullable="true" />
+    <Property Type="Int32" Name="Route_Status" Nullable="true" />
+    <Property Type="Int32" Name="UserRole" Nullable="false" />
+  </ComplexType>
+  <ComplexType Name="sp_Get_PromotionCode_Result">
+    <Property Type="Int32" Name="Status" Nullable="false" />
+    <Property Type="String" MaxLength="50" FixedLength="false" Unicode="true" Name="Code" Nullable="true" />
+    <Property Type="String" MaxLength="300" FixedLength="false" Unicode="true" Name="Memo" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="sp_Get_PromotionCount_Result">
+    <Property Type="Int32" Name="Status" Nullable="false" />
+    <Property Type="Int32" Name="Total" Nullable="false" />
+    <Property Type="Int32" Name="Subscribed" Nullable="false" />
+    <Property Type="Int32" Name="Registerted" Nullable="false" />
+    <Property Type="Int32" Name="Unsubscribed" Nullable="false" />
+  </ComplexType>
+  <ComplexType Name="sp_Load_Promoters_Result">
+    <Property Type="String" MaxLength="50" FixedLength="false" Unicode="true" Name="NickName" Nullable="true" />
+    <Property Type="String" MaxLength="50" FixedLength="false" Unicode="true" Name="UserGUID" Nullable="true" />
+    <Property Type="String" MaxLength="300" FixedLength="false" Unicode="true" Name="PortraitsUrl" Nullable="true" />
+    <Property Type="String" MaxLength="300" FixedLength="false" Unicode="true" Name="PortraitsThumbUrl" Nullable="true" />
+    <Property Type="Int32" Name="Registerted" Nullable="true" />
+    <Property Type="Int32" Name="Subscribed" Nullable="true" />
+    <Property Type="Int32" Name="Unsubscribed" Nullable="true" />
+  </ComplexType>
+  <EntityType Name="tbl_User_Payment">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="OrderID" Type="Int64" Nullable="false" />
+    <Property Name="PayAmount" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="PayMethod" Type="Int32" />
+    <Property Name="PayFolio" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="PayStatus" Type="Int32" />
+    <Property Name="CreateDate" Type="DateTime" Precision="0" />
+    <Property Name="UpdateDate" Type="DateTime" Precision="0" />
+  </EntityType>
+  <ComplexType Name="sp_Load_PromotionUsers_Result">
+    <Property Type="Int32" Name="Status" Nullable="false" />
+    <Property Type="String" MaxLength="50" FixedLength="false" Unicode="true" Name="UserGUID" Nullable="true" />
+    <Property Type="String" MaxLength="50" FixedLength="false" Unicode="true" Name="OpenID" Nullable="true" />
+    <Property Type="String" MaxLength="50" FixedLength="false" Unicode="true" Name="NickName" Nullable="true" />
+    <Property Type="String" MaxLength="50" FixedLength="false" Unicode="true" Name="Mobile" Nullable="true" />
+    <Property Type="Int32" Name="UserStatus" Nullable="true" />
+    <Property Type="DateTime" Name="CreateDate" Precision="0" />
+  </ComplexType>
+  <EntityType Name="tbl_User">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="OpenID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="FakeID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="UserGUID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="NickName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Gender" Type="Boolean" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="IdentityNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Birthday" Type="DateTime" Precision="0" />
+    <Property Name="Country" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Province" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Mobile" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="WeChatID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="QQ" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="UserRole" Type="Int32" />
+    <Property Name="LicencePlateNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="PortraitsUrl" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+    <Property Name="PortraitsThumbUrl" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+    <Property Name="IsSynced" Type="Boolean" />
+    <Property Name="IsExtended" Type="Boolean" />
+    <Property Name="EnableNotify" Type="Boolean" />
+    <Property Name="CreateDate" Type="DateTime" Precision="0" />
+    <Property Name="UpdateDate" Type="DateTime" Precision="0" />
+    <Property Name="SubscribeDate" Type="DateTime" Precision="0" />
+    <Property Name="SubscribeCount" Type="Int32" />
+    <Property Name="RegisterDate" Type="DateTime" Precision="0" />
+    <Property Name="RegisterCount" Type="Int32" />
+    <Property Name="UnsubscribeDate" Type="DateTime" Precision="0" />
+    <Property Name="UnsubscribeCount" Type="Int32" />
+    <Property Name="Status" Type="Int32" />
+    <Property Name="RefID" Type="Int64" />
+  </EntityType>
+  <EntityType Name="tbl_Common_PhoneVerify">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Phonenum" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Code" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Channel" Type="Int32" />
+    <Property Name="Count" Type="Int32" />
+    <Property Name="Status" Type="Int32" />
+    <Property Name="CreateDate" Type="DateTime" Precision="0" />
+    <Property Name="UpdateDate" Type="DateTime" Precision="0" />
+  </EntityType>
+  <EntityType Name="tbl_Common_City">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="PID" Type="Int64" Nullable="false" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Spell" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="OrderNo" Type="Int32" />
+  </EntityType>
+  <EntityType Name="tbl_Common_Province">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="OrderNo" Type="Int32" />
+  </EntityType>
+  <EntityType Name="tbl_User_External">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserGUID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="NickName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Gender" Type="Boolean" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="IdentityNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Birthday" Type="DateTime" Precision="0" />
+    <Property Name="Country" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Province" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Mobile" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="WeChatID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="QQ" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="UserRole" Type="Int32" />
+    <Property Name="LicencePlateNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="PortraitsUrl" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+    <Property Name="PortraitsThumbUrl" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+    <Property Name="Status" Type="Int32" />
+    <Property Name="CreateDate" Type="DateTime" Precision="0" />
+    <Property Name="UpdateDate" Type="DateTime" Precision="0" />
+  </EntityType>
+  <EntityType Name="tbl_User_Insurance">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="RequestorID" Type="Int64" Nullable="false" />
+    <Property Name="ICID" Type="Int32" Nullable="false" />
+    <Property Name="Folio" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="InsureKey" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="InsureNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Province" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="District" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Location" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+    <Property Name="OccupationCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ActivityCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="PresentCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="TSRCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="IssueDate" Type="DateTime" Precision="0" />
+    <Property Name="IssueMemo" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+    <Property Name="EffectDate" Type="DateTime" Precision="0" />
+    <Property Name="ExpireDate" Type="DateTime" Precision="0" />
+    <Property Name="Status" Type="Int32" />
+    <Property Name="CreateDate" Type="DateTime" Precision="0" />
+    <Property Name="UpdateDate" Type="DateTime" Precision="0" />
+  </EntityType>
+  <EntityType Name="tbl_User_Order_Insurance">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserID" Type="Int64" Nullable="false" />
+    <Property Name="OrderID" Type="Int64" Nullable="false" />
+    <Property Name="InsuranceID" Type="Int64" Nullable="false" />
+    <Property Name="CreateDate" Type="DateTime" Precision="0" />
+    <Property Name="UpdateDate" Type="DateTime" Precision="0" />
+  </EntityType>
+  <EntityType Name="tbl_User_Promotion">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserID" Type="Int64" />
+    <Property Name="ChannelID" Type="Int64" />
+    <Property Name="ChannelCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ChannelMemo" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+    <Property Name="CreateDate" Type="DateTime" Precision="0" />
+    <Property Name="UpdateDate" Type="DateTime" Precision="0" />
+  </EntityType>
+  <EntityType Name="tbl_User_Track">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserID" Type="Int64" />
+    <Property Name="Longitude" Type="Double" />
+    <Property Name="Latitude" Type="Double" />
+    <Property Name="CreateDate" Type="DateTime" Precision="0" />
+    <Property Name="UpdateDate" Type="DateTime" Precision="0" />
+  </EntityType>
+</Schema>

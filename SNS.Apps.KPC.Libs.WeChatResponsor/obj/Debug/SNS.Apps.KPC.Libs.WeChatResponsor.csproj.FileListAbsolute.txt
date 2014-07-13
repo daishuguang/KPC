@@ -1,0 +1,14 @@
+E:\KPC\V3\SNS.Apps.KPC.Libs.WeChatResponsor\obj\Debug\SNS.Apps.KPC.Libs.WeChatResponsor.csprojResolveAssemblyReference.cache
+E:\KPC\V3\SNS.Apps.KPC.Libs.WeChatResponsor\bin\Debug\SNS.Apps.KPC.Libs.WeChatResponsor.dll
+E:\KPC\V3\SNS.Apps.KPC.Libs.WeChatResponsor\bin\Debug\SNS.Apps.KPC.Libs.WeChatResponsor.pdb
+E:\KPC\V3\SNS.Apps.KPC.Libs.WeChatResponsor\bin\Debug\Newtonsoft.Json.dll
+E:\KPC\V3\SNS.Apps.KPC.Libs.WeChatResponsor\bin\Debug\SNS.Apps.KPC.Libs.Configurations.dll
+E:\KPC\V3\SNS.Apps.KPC.Libs.WeChatResponsor\bin\Debug\SNS.Apps.KPC.Libs.IServices.dll
+E:\KPC\V3\SNS.Apps.KPC.Libs.WeChatResponsor\bin\Debug\SNS.Apps.KPC.Libs.Models.dll
+E:\KPC\V3\SNS.Apps.KPC.Libs.WeChatResponsor\bin\Debug\SNS.Apps.KPC.Libs.Utils.dll
+E:\KPC\V3\SNS.Apps.KPC.Libs.WeChatResponsor\bin\Debug\SNS.Apps.KPC.Libs.Configurations.pdb
+E:\KPC\V3\SNS.Apps.KPC.Libs.WeChatResponsor\bin\Debug\SNS.Apps.KPC.Libs.IServices.pdb
+E:\KPC\V3\SNS.Apps.KPC.Libs.WeChatResponsor\bin\Debug\SNS.Apps.KPC.Libs.Models.pdb
+E:\KPC\V3\SNS.Apps.KPC.Libs.WeChatResponsor\bin\Debug\SNS.Apps.KPC.Libs.Utils.pdb
+E:\KPC\V3\SNS.Apps.KPC.Libs.WeChatResponsor\obj\Debug\SNS.Apps.KPC.Libs.WeChatResponsor.dll
+E:\KPC\V3\SNS.Apps.KPC.Libs.WeChatResponsor\obj\Debug\SNS.Apps.KPC.Libs.WeChatResponsor.pdb

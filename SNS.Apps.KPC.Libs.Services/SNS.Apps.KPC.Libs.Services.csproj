@@ -1,0 +1,154 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{D201D8FD-6CCA-4F80-BF84-B301D380DC66}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SNS.Apps.KPC.Libs.Services</RootNamespace>
+    <AssemblyName>SNS.Apps.KPC.Libs.Services</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Dlls\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net, Version=1.2.12.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Dlls\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Activation" />
+    <Reference Include="System.ServiceModel.Web" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ConsoleService.cs" />
+    <Compile Include="InsuranceService.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="RepositoryService.UserInsurance.cs" />
+    <Compile Include="RepositoryService.UserPayment.cs" />
+    <Compile Include="RepositoryService.Common.cs" />
+    <Compile Include="RepositoryService.UserPromotion.cs" />
+    <Compile Include="RepositoryService.Comment.cs" />
+    <Compile Include="RepositoryService.UserOrder.cs" />
+    <Compile Include="RepositoryService.Route.cs" />
+    <Compile Include="RepositoryService.User.cs" />
+    <Compile Include="RepositoryService.UserRoute.cs" />
+    <Compile Include="RepositoryService.UserTrack.cs" />
+    <Compile Include="RouteMatrixService.cs" />
+    <Compile Include="LogService.cs" />
+    <Compile Include="Service References\InsuranceService_Metlife_Ref\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="SMSService.cs" />
+    <Compile Include="WeChatService.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SNS.Apps.KPC.Libs.Configurations\SNS.Apps.KPC.Libs.Configurations.csproj">
+      <Project>{64876bc5-0f52-457b-9c5f-613532887c02}</Project>
+      <Name>SNS.Apps.KPC.Libs.Configurations</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SNS.Apps.KPC.Libs.IServices\SNS.Apps.KPC.Libs.IServices.csproj">
+      <Project>{78421d37-ee82-4d39-bb9d-95285a3a76b1}</Project>
+      <Name>SNS.Apps.KPC.Libs.IServices</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SNS.Apps.KPC.Libs.Models.Repositories\SNS.Apps.KPC.Libs.Models.Repositories.csproj">
+      <Project>{c95c923e-74ab-4db5-b740-5e925444f2e5}</Project>
+      <Name>SNS.Apps.KPC.Libs.Models.Repositories</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SNS.Apps.KPC.Libs.Models.WeChat\SNS.Apps.KPC.Libs.Models.WeChat.csproj">
+      <Project>{5c8f0164-0dd4-40a7-bcc4-7f4336384923}</Project>
+      <Name>SNS.Apps.KPC.Libs.Models.WeChat</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SNS.Apps.KPC.Libs.Models\SNS.Apps.KPC.Libs.Models.csproj">
+      <Project>{816d4429-e7d1-4ccb-b77b-6cceebd1b846}</Project>
+      <Name>SNS.Apps.KPC.Libs.Models</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SNS.Apps.KPC.Libs.Utils\SNS.Apps.KPC.Libs.Utils.csproj">
+      <Project>{7899de2b-4fb4-40cc-bc76-28f854fb5004}</Project>
+      <Name>SNS.Apps.KPC.Libs.Utils</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SNS.Apps.KPC.Libs.WeChatHelper\SNS.Apps.KPC.Libs.WeChatHelper.csproj">
+      <Project>{7f7985d6-0785-4672-8253-2a8e8ca79f93}</Project>
+      <Name>SNS.Apps.KPC.Libs.WeChatHelper</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Service References\InsuranceService_Metlife_Ref\SNS.Apps.KPC.Libs.Services.InsuranceService_Metlife_Ref.doRequestResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\InsuranceService_Metlife_Ref\YSW2ICareSave.wsdl" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\InsuranceService_Metlife_Ref\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\InsuranceService_Metlife_Ref\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\InsuranceService_Metlife_Ref\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\InsuranceService_Metlife_Ref\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

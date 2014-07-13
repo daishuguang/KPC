@@ -1,0 +1,134 @@
+﻿@model IEnumerable<SNS.Apps.KPC.Libs.Models.UserOrderResult>
+@using SNS.Apps.KPC.Libs.Utils
+@using SNS.Apps.KPC.Libs.Models
+
+@{
+    if (HttpContext.Current.Request.UserAgent.Contains("kuaipinche"))
+    {
+        ViewBag.Title = "我的拼单";
+    }
+    else
+    {
+        ViewBag.Title = "快拼车";
+    }
+    Layout = "~/Views/Shared/_LayoutList.cshtml";
+}
+
+@section head{
+    @Styles.Render("~/Content/route/regandedit")
+
+    <style>
+        #wrapper ul li {
+            padding: 0px;
+            border: none;
+        }
+
+            #wrapper ul li a {
+                display: block;
+                padding: 0px 10px;
+                border-bottom: 1px solid #ddd;
+            }
+
+        #orderlist li:nth-child(2n+1) {
+            background-color: white;
+        }
+
+        #orderlist li:active {
+            /*background-color: #efefef;*/
+            background-color: #d5d5d5;
+        }
+    </style>
+    <script>
+        var IsShowWait = false;
+        if (location.hash.indexOf('#w') === -1) {
+            // 不是从微信消息进来的
+            IsShowWait = true;
+        }
+    </script>
+
+}
+@RenderPage("/Views/Shared/_Navbar.cshtml")
+<div id="wrapper">
+    <div class="header" style="@(HttpContext.Current.Request.UserAgent.Contains("kuaipinche") ?"display:none":"")">
+        <span id="navbar" class="headermenu"></span>
+        <div class="headertitle">我的拼单</div>
+    </div>
+    <ul id="orderlist"></ul>
+    <div id="shade" style="text-align:center;display:none">
+        <img src="~/Content/images/loading.gif" />正在加载中...
+    </div>
+    @RenderPage("/Views/Shared/_Footer.cshtml")
+
+</div><!-- / wrapper -->
+
+<script type="text/javascript">
+    var _currUserID = "@ViewBag.CurrentUserID";
+</script>
+
+<script type="text/template" id="orderlist_template">
+    <% _.each(datas, function(item) { %>
+    <li>
+        <% var flag = "@(HttpContext.Current.Request.UrlReferrer == null ? "#flag" : "")"%>
+        <a onclick="if (IsShowWait) showWait();" href="/order/detail/<%= item.Folio %>#mp.weixin.qq.com<%= flag %>" style="color:black">
+            <table style="width:100%;">
+                <tr>
+                    <td style="width:50px;">
+                        <img width="50" height="50" style="vertical-align:middle;" src="<% var picUrl = ((_currUserID == item.Requestor.UserGUID) ? (item.Supplier.PortraitsThumbUrl) : (item.Requestor.PortraitsThumbUrl)); %> <%= picUrl %>" />
+                    </td>
+                    <td>
+                        <table style="width: 100%;table-layout:fixed" border="0" cellpadding="0" cellspacing="0">
+                            <tr style="height:30px;">
+                                <td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                    @*<%= item.Route.From_City %><%= item.Route.From_Location === null ? "": item.Route.From_District %>*@
+                                    <%= item.Route.From_City === item.Route.To_City ? item.Route.From_District : item.Route.From_City %><%= item.Route.From_Location %>
+                                </td>
+                                <td style="text-align: right; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                    @*<%= item.Route.To_City %><%= item.Route.To_Location === null ? "": item.Route.To_District %>*@
+                                    <%= item.Route.From_City === item.Route.To_City ? item.Route.To_District : item.Route.To_City %><%= item.Route.To_Location %>
+                                </td>
+                            </tr>
+                            <tr style="height: 30px; color:gray;font-size: 14px;">
+                                <td style="width:50%;">
+                                    <%
+                                    var enumstatus = ((typeof(item.Status) == "undefined" || item.Status == "") ? (0) : (item.Status)), status;
+
+                                    switch(enumstatus) {
+                                    case @((int)OrderStatus.PendingForPayment): status = "@OrderStatus.PendingForPayment.GetDescription()"; break;
+                                    case @((int)OrderStatus.FinishToPayment_Deposit): status = "@(OrderStatus.FinishToPayment_Deposit.GetDescription())"; break;
+                                    case @((int)OrderStatus.FinishToPayment_Residue): status = "@(OrderStatus.FinishToPayment_Residue.GetDescription())"; break;
+                                    case @((int)OrderStatus.FinishToPayment_FullCash): status="@(OrderStatus.FinishToPayment_FullCash.GetDescription())"; break;
+                                    case @((int)OrderStatus.Completed): status = "@(OrderStatus.Completed.GetDescription())"; break;
+                                    case @((int)OrderStatus.Expired): status = "@(OrderStatus.Expired.GetDescription())"; break;
+                                    case @((int)OrderStatus.Cancelled): status = "@(OrderStatus.Cancelled.GetDescription())"; break;
+                                    case @((int)OrderStatus.PendingForRefund): status = "@(OrderStatus.PendingForRefund.GetDescription())"; break;
+                                    case @((int)OrderStatus.FinishToRefund): status = "@(OrderStatus.FinishToRefund.GetDescription())"; break;
+                                    }
+                                    %>
+                                    <%= status %>
+                                </td>
+                                <td style="text-align:right">
+                                    <% var len = item.StartDate.length, datestring = item.StartDate.substring(6, len - 2); dateobj = new Date(parseInt(datestring)); %>
+
+                                    <%= dateobj.getMonth() + 1 < 10 ? '0' + (dateobj.getMonth() + 1) : dateobj.getMonth() + 1 %>月<%= dateobj.getDate() < 10 ? '0' + dateobj.getDate() : dateobj.getDate() %>日
+
+                                    <%= dateobj.getHours() < 10 ? '0' + dateobj.getHours() : dateobj.getHours() %>:<%= dateobj.getMinutes() < 10 ? '0' + dateobj.getMinutes() : dateobj.getMinutes() %>
+
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </a>
+    </li>
+    <% }); %>
+</script>
+
+<script>
+    var KPC = KPC || {};
+
+    KPC.OrderList = {};
+    KPC.OrderList.OrderType = "@((int)ViewBag.OrderType)";
+</script>
+
+@Scripts.Render("~/bundles/order/list")

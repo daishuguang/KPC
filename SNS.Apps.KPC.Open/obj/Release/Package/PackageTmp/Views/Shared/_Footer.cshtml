@@ -1,0 +1,88 @@
+﻿<div class="footer">
+    <span>&copy;2013-@DateTime.Now.Year</span>
+    <a href="weixin://contacts/profile/gh_b52e1dd392a2">
+        <span>快拼车</span>
+    </a>
+</div><!-- /footer -->
+
+<div id="top_back" class="top_div">
+    <a href="javascript:window.scrollTo(0,0)">&nbsp;</a>
+</div><!-- / back to top -->
+
+<div id="running" style="width:100%;height:100%;visibility:hidden;position:fixed;top:0px;left:0px;z-index:1000;">
+    <table width="100%" height="100%">
+        <tr align="center" valign="middle">
+            <td>
+                <table width="200px" height="200px" bgcolor="black" style="border-radius:5px;filter: alpha(opacity=70); opacity: 0.7; color: white;">
+                    <tr align="center" valign="middle">
+                        <td>
+                            <div id="clocktimes">
+                            </div>
+                            <br />正在跳转<br />
+                            请稍后......
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<script>
+    var KPC = KPC || {};
+    KPC.time = 0;
+    KPC.seed = 0;
+
+    function tick() {
+        KPC.time = KPC.time - 1;
+        var min = Math.floor(KPC.time / 60);
+        var second = KPC.time - min * 60;
+        document.getElementById("clocktimes").innerText = second + "秒";
+    }
+
+    function showWait() {
+        document.getElementById("clocktimes").innerText = "";
+        if (navigator.userAgent.toLowerCase().indexOf("android") > 0) {
+            KPC.time = 10;
+        } else {
+            KPC.time = 10;
+        }
+        KPC.seed = 0;
+        KPC.seed = window.setInterval(tick, 1000);
+        document.getElementById("running").style.visibility = "visible";
+        window.setTimeout(hideWait, 10000);
+        window.onunload = hideWait;
+
+    }
+
+    function hideWait() {
+        window.clearInterval(KPC.seed);
+        document.getElementById("running").style.visibility = "hidden";
+    }
+
+    function viewProfile() {
+        if (typeof WeixinJSBridge != "undefined" && WeixinJSBridge.invoke) {
+            WeixinJSBridge.invoke("profile", {
+                username: "gh_b52e1dd392a2",
+                scene: "19"
+            });
+
+            //WeixinJSBridge.invoke(
+            //	'addContact',
+            //	{
+            //		webtype: '1',
+            //		username: 'gh_b52e1dd392a2'
+            //	},
+            //	function (e) {
+            //		// 返回d.err_msg取值，d还有一个属性是err_desc
+            //		// add_contact:cancel 用户取消
+            //		// add_contact:fail　关注失败
+            //		// add_contact:ok 关注成功
+            //		// add_contact:added 已经关注
+            //		// WeixinJSBridge.log(d.err_msg);
+            //		alert(e.err_msg);
+            //	}
+            //);
+        }
+    }
+</script>

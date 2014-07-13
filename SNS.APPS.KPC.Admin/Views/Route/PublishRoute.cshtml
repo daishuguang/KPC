@@ -1,0 +1,624 @@
+﻿@{
+    ViewBag.Title = "发布路线";
+}
+
+<link href="~/easyui/themes/metro-blue/easyui.css" rel="stylesheet" />
+<link href="~/easyui/themes/icon.css" rel="stylesheet" />
+<style>
+    .routeForm {
+        text-align: center;
+    }
+</style>
+<script src="~/Scripts/jquery-2.0.3.min.js"></script>
+<script src="~/easyui/jquery.easyui.js"></script>
+<script src="~/easyui/locale/easyui-lang-zh_CN.js"></script>
+<script src="~/Scripts/common/snsglobal.js"></script>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=qqvwnr3HNAYXL2SmrAFnk3xt"></script>
+
+
+<script>
+    var map;
+    var dlgmap;
+    var tempAddressComp;
+    var tempPP;
+    var tempElementRouteId;
+    var tempElementCityId;
+    var tempElementRoutesLngLatId;
+    var tempElementAC;
+    var tempElementUserId;
+    var tempElementUserNickName;
+
+    $().ready(function () {
+        var isFrom = true;
+
+        var province = "上海"
+        map = new BMap.Map("allmap");          // 创建地图实例  
+        var point = new BMap.Point(116.331398, 39.897445);
+        map.centerAndZoom(point, 15);
+        var myCity = new BMap.LocalCity();
+        myCity.get(setLocationCity);
+
+        map.addControl(new BMap.NavigationControl());  //添加默认缩放平移控件
+        map.enableScrollWheelZoom();    //启用滚轮放大缩小，默认禁用
+        map.enableContinuousZoom();    //启用地图惯性拖拽，默认禁用
+
+        var gc = new BMap.Geocoder();
+        var startAC = new BMap.Autocomplete(    //建立一个自动完成的对象
+                    {
+                        "input": "ip_From_Location",
+                        "location": map
+                    });
+        var endAC = new BMap.Autocomplete(    //建立一个自动完成的对象
+                    {
+                        "input": "ip_To_Location",
+                        "location": map
+                    });
+
+        endAC.addEventListener("onhighlight", function (e) {  //鼠标放在下拉列表上的事件
+            var str = "";
+            var _value = e.fromitem.value;
+            var value = "";
+            if (e.fromitem.index > -1) {
+                value = _value.province + _value.city + _value.district + _value.street + _value.business;
+            }
+            //str = "FromItem<br />index = " + e.fromitem.index + "<br />value = " + value;
+
+            value = "";
+            if (e.toitem.index > -1) {
+                _value = e.toitem.value;
+                value = _value.province + _value.city + _value.district + _value.street + _value.business;
+            }
+            //str += "<br />ToItem<br />index = " + e.toitem.index + "<br />value = " + value;
+            //G("searchResultPanel").innerHTML = str;
+        });
+
+        startAC.addEventListener("onhighlight", function (e) {  //鼠标放在下拉列表上的事件
+            var str = "";
+            var _value = e.fromitem.value;
+            var value = "";
+            if (e.fromitem.index > -1) {
+                value = _value.province + _value.city + _value.district + _value.street + _value.business;
+            }
+            str = "FromItem<br />index = " + e.fromitem.index + "<br />value = " + value;
+
+            value = "";
+            if (e.toitem.index > -1) {
+                _value = e.toitem.value;
+                value = _value.province + _value.city + _value.district + _value.street + _value.business;
+            }
+            str += "<br />ToItem<br />index = " + e.toitem.index + "<br />value = " + value;
+            //G("searchResultPanel").innerHTML = str;
+        });
+
+        var myValue;
+        startAC.addEventListener("onconfirm", function (e) {    //鼠标点击下拉列表后的事件
+            var _value = e.item.value;
+            myValue = _value.province + _value.city + _value.district + _value.street + _value.business;
+            //G("searchResultPanel").innerHTML = "onconfirm<br />index = " + e.item.index + "<br />myValue = " + myValue;
+            isFrom = true;
+            setPlace('hd_startLngLat');
+        });
+
+        endAC.addEventListener("onconfirm", function (e) {    //鼠标点击下拉列表后的事件
+            var _value = e.item.value;
+            myValue = _value.province + _value.city + _value.district + _value.street + _value.business;
+            //G("searchResultPanel").innerHTML = "onconfirm<br />index = " + e.item.index + "<br />myValue = " + myValue;
+
+            isFrom = false;
+            setPlace('hd_endLngLat');
+        });
+
+
+        function setPlace(lngLatId) {
+            map.clearOverlays();    //清除地图上所有覆盖物
+            function myFun() {
+                var pp = local.getResults().getPoi(0).point;    //获取第一个智能搜索的结果
+                map.centerAndZoom(pp, 18);
+                map.addOverlay(new BMap.Marker(pp));    //添加标注
+                setLngLat(lngLatId, pp);
+            }
+            var local = new BMap.LocalSearch(map, { //智能搜索
+                onSearchComplete: myFun
+            });
+            local.search(myValue);
+        }
+
+        function setLocationCity(result) {
+            var cityName = result.name;
+            map.setCenter(cityName);
+            $('#dvLocalCity').text("当前城市： " + cityName);
+        }
+
+        function drivingSearch() {
+            map.clearOverlays();
+            var startPointArray = $('#hd_startLngLat').val().split(',');
+            var endPointArray = $('#hd_endLngLat').val().split(',');
+            var p1 = new BMap.Point(startPointArray[0], startPointArray[1]);
+            var p2 = new BMap.Point(endPointArray[0], endPointArray[1]);
+
+            var driving = new BMap.DrivingRoute(map, { renderOptions: { map: map, autoViewport: true } });
+            driving.search(p1, p2);
+        };
+
+
+
+        function initDlgMap() {
+            dlgmap = new BMap.Map("dv_map_dlg_content");          // 创建地图实例 
+            dlgmap.addControl(new BMap.NavigationControl());  //添加默认缩放平移控件
+
+            dlgmap.enableScrollWheelZoom();    //启用滚轮放大缩小
+            dlgmap.enableContinuousZoom();    //启用地图惯性拖拽
+            dlgmap.centerAndZoom(province, 15);
+
+            dlgmap.addEventListener("click", function (e) {
+                dlgmap.clearOverlays();
+                var pt = e.point;
+                gc.getLocation(pt, function (rs) {
+                    var addComp = rs.addressComponents;
+                    marker = new BMap.Marker(pt);
+                    dlgmap.addOverlay(marker);
+                    tempPP = pt;
+                    tempAddressComp = addComp;
+                });
+            });
+
+        }
+
+        function setLocationFromDlgMap(routeId, lngLatId, pp, addressComp) {
+            $("#" + routeId).val(
+                addressComp.province
+                + addressComp.city
+                + addressComp.district
+                + addressComp.street
+                + addressComp.streetNumber);
+            setLngLat(lngLatId, pp);
+        }
+
+        function clearDlgMap() {
+            dlgmap.clearOverlays();
+            dlgmap.removeEventListener('click');
+        }
+
+        $('#link_start_search').on('click', function () {
+            tempElementRouteId = "ip_From_Location";
+            tempElementRoutesLngLatId = "hd_startLngLat";
+            province = $("#ip_From_City").val();
+            isFrom = true;
+            openDlgMap();
+        });
+
+        $('#link_end_search').on('click', function () {
+            tempElementRouteId = "ip_To_Location";
+            tempElementRoutesLngLatId = "hd_endLngLat";
+            province = $("#ip_To_City").val();
+            isFrom = false;
+            openDlgMap();
+        });
+
+        $('#dv_map_dlg_close').on('click', function () {
+            closeDlgMap();
+        });
+
+        $('#dv_map_dlg_save').on('click', function () {
+            setLocationFromDlgMap(tempElementRouteId, tempElementRoutesLngLatId, tempPP, tempAddressComp);
+            $('#' + tempElementRouteId).trigger('focus');
+            closeDlgMap();
+        });
+
+        $('.routeDriving').on('click', function () {
+            drivingSearch();
+        });
+
+        function setLngLat(id, pp) {
+            gc.getLocation(pp, function (rs) {
+                var addComp = rs.addressComponents;
+                if (isFrom) {
+                    $('#hd_startProvince').val(addComp.province);
+                    $('#hd_startCity').val(addComp.city);
+                    $('#hd_startDistrict').val(addComp.district);
+                    $('#hd_startLocation').val($('#ip_From_Location').val());
+                    $('#hd_startLongitude').val(pp.lng);
+                    $('#hd_startLatitude').val(pp.lat);
+                }
+                else {
+                    $('#hd_endProvince').val(addComp.province);
+                    $('#hd_endCity').val(addComp.city);
+                    $('#hd_endDistrict').val(addComp.district);
+                    $('#hd_endLocation').val($('#ip_To_Location').val());
+                    $('#hd_endLongitude').val(pp.lng);
+                    $('#hd_endLatitude').val(pp.lat);
+                }
+            });
+            $("#" + id).val(pp.lng + "," + pp.lat);
+        }
+
+        function openDlgMap() {
+            $('#dv_map_dlg').dialog('open');
+            initDlgMap();
+        }
+
+        function closeDlgMap() {
+            $('#dv_map_dlg').dialog('close');
+            clearDlgMap();
+        }
+
+        $('#ip_From_City').on('blur', function () {
+            if ($(this).val() == "") {
+                removeIconMessage(this.id);
+                return;
+            }
+            $(this).validatebox('validate');
+            tempElementCityId = this.id;
+            tempElementAC = startAC;
+            searchCity($(this).val());
+        });
+
+        $('#ip_To_City').on('blur', function () {
+            if ($(this).val() == "") {
+                removeIconMessage(this.id);
+                return;
+            }
+            $(this).validatebox('validate');
+            tempElementCityId = this.id;
+            tempElementAC = endAC;
+            searchCity($(this).val());
+        });
+
+
+
+        function searchCity(c) {
+            var city = new BMap.LocalSearch(map, { renderOptions: { map: map, selectFirstResult: false, autoViewport: false } });
+            city.search(c);
+
+            city.setSearchCompleteCallback(function (fs) {
+                var result = false;
+                if (city.getStatus() == BMAP_STATUS_SUCCESS) {
+                    setACCity(tempElementCityId, tempElementAC);
+                    result = true;
+                }
+                else if (city.getStatus() == BMAP_STATUS_UNKNOWN_LOCATION) {
+                    result = false;
+                }
+                appendIconMessage(tempElementCityId, result);
+
+            });
+        }
+
+        $('#cb_Type').combobox({
+            onSelect: function (record) {
+                if (record.value == 'sxb') {
+                    $('#dd_ld_startdate').datebox('disable');
+                    $('#cb_isLt').combobox('disable');
+                }
+                else {
+                    $('#dd_ld_startdate').datebox('enable');
+                    $('#cb_isLt').combobox('enable')
+                }
+            }
+        });
+
+        $('#link_user_search').on('click', function () {
+            $('#dv_user_search_dlg').dialog('open');
+        });
+
+
+        function appendIconMessage(id, isSuccess) {
+            removeIconMessage(id);
+            if (isSuccess)
+                $(' <img class="iconMessage" src="../../easyui/themes/icons/ok.png" />').insertAfter($("#" + id));
+            else
+                $(' <img class="iconMessage" src="../../easyui/themes/icons/no.png" />').insertAfter($("#" + id));
+        }
+
+        function removeIconMessage(id) {
+            $("#" + id).next('img').remove();
+        }
+
+        function setACCity(id, ac) {
+            ac.setLocation($("#" + id).val());
+        }
+    });
+
+    function G(id) {
+        return document.getElementById(id);
+    }
+
+</script>
+
+<div class="easyui-layout" data-options="fit:true">
+    <div data-options="region:'north'" style="height: 50px"></div>
+     <div data-options="region:'south',split:true" style="height: 50px;">
+        <div style="margin-top: 5px; text-align: center">
+            <span style="color: gray" > 快拼车系统后台<br />
+                建议使用Chrome或者FireFox浏览器浏览<br />
+               
+            </span>
+        </div>
+    </div>
+    <div data-options="region:'south'" style="height: 50px;"></div>
+    <div data-options="region:'east',split:true,collapsed:true" title="附加信息" style="width: 180px;"></div>
+    <div data-options="region:'west',split:true" title="菜单" style="width: 150px;">
+        <ul style="list-style-type: none; padding-left: 10px">
+            <li>@Html.ActionLink("路线", "Index", "Route")</li>
+            <li>@Html.ActionLink("发布路线", "PublishRoute", "Route")</li>
+            <li>@Html.ActionLink("用户微信记录", "Index", "WeChatMessage")</li>
+            <li>@Html.ActionLink("用户微信详细列表", "WeChatMessageList", "WeChatMessage")</li>
+            <li>@Html.ActionLink("订单列表", "Index", "Order")</li>
+            <li>@Html.ActionLink("系统配置", "Index", "Configuration")</li>
+        </ul>
+
+    </div>
+    <div data-options="region:'center',title:'快拼车管理中心',iconCls:'icon-ok',fit:true,border:false">
+        <div class="sns-info">
+            <div class="sns-tip icon-tip"></div>
+            <div>发布路线</div>
+        </div>
+        <div class="easyui-layout" data-options="fit:true">
+            <div data-options="region:'west',split:true,border:true" style="width: 400px">
+                <div class="easyui-panel" data-options="border:false" title="路线信息发布">
+                    <div style="padding: 10px 0 10px 60px;">
+                        <form id="ff" action="@Url.Action("PublishRoute", "Route")" method="post" >
+                            <table>
+                                <tr>
+                                    <td>选择用户:</td>
+                                    <td>
+                                        <input class="easyui-validatebox" type="text" id="ip_User" name="publishUser" data-options="required:true,disabled:true" />
+                                        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-search'" id="link_user_search">选择</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>起点城市:</td>
+                                    <td>
+                                        <input class="easyui-validatebox" type="text" id="ip_From_City" name="fromCity" data-options="required:true" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>详细地址:</td>
+                                    <td>
+                                        <input class="easyui-validatebox" type="text" id="ip_From_Location" name="fromLocation" data-options="required:true" />
+                                        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-search'" id="link_start_search">选择</a>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>终点城市:</td>
+                                    <td>
+                                        <input class="easyui-validatebox" type="text" id="ip_To_City" name="toCity" data-options="required:true" /></td>
+                                </tr>
+                                <tr>
+                                    <td>详细地址:</td>
+                                    <td>
+                                        <input class="easyui-validatebox" type="text" id="ip_To_Location" name="toLocation" data-options="required:true" />
+                                        <a href="javascript:void(0)" id="link_end_search" class="easyui-linkbutton" data-options="iconCls:'icon-search'">选择</a>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>出发时间:</td>
+                                    <td>
+                                        <input class="easyui-timespinner" data-options="required:true" name="startDateTime" style="width: 80px;">
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td>我是:</td>
+                                    <td>
+                                        <select id="op_isDriver" name="userRole" data-options="required:true" class="easyui-combobox">
+                                            <option selected="selected" value="0">乘客</option>
+                                            <option value="1">车主</option>
+                                        </select>
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td>是否长途:</td>
+                                    <td>
+                                        <select id="cb_Type" name="pincheType" data-options="required:true" class="easyui-combobox">
+                                            <option selected="selected" value="sxb">否</option>
+                                            <option value="ct">是</option>
+                                        </select>
+                                        <input id="dd_ld_startdate" data-options="disabled:true" name="startDate" class="easyui-datebox" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>是否长期:</td>
+                                    <td>
+                                        <select id="cb_isLt" class="easyui-combobox" name="isLongTerm" data-options="disabled:true">
+                                            <option value="false">否</option>
+                                            <option value="true">是</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>基本信息:</td>
+                                    <td>
+                                        <input class="easyui-numberspinner" data-options="min:0,max:100" name="seatCount" style="width: 80px;">
+                                        座
+                                         <input class="easyui-numberbox" data-options="min:0,precision:2" name="charge" style="width: 80px;">
+                                        元/人
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td>备注:</td>
+                                    <td>
+                                        <textarea name="message" style="height: 60px;"></textarea></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" style="text-align: center; padding: 5px">
+                                        <input type="submit" style="width: 60px; height: 40px" value="发布">
+                                        <input type="button" style="width: 60px; height: 40px" onclick="clearForm(this)" value="清空"></td>
+                            </table>
+                            <input type="hidden" name="UserId" id="hd_userid" />
+                            <input type="hidden" name="From_Location_LngLat" id="hd_startLngLat" />
+                            <input type="hidden" name="From_Province" id="hd_startProvince" />
+                            <input type="hidden" name="From_City" id="hd_startCity" />
+                            <input type="hidden" name="From_District" id="hd_startDistrict" />
+                            <input type="hidden" name="From_Location" id="hd_startLocation" />
+                            <input type="hidden" name="From_Longitude" id="hd_startLongitude" />
+                            <input type="hidden" name="From_Latitude" id="hd_startLatitude" />
+                            <input type="hidden" name="To_Location_LngLat" id="hd_endLngLat" />
+                            <input type="hidden" name="To_Province" id="hd_endProvince" />
+                            <input type="hidden" name="To_City" id="hd_endCity" />
+                            <input type="hidden" name="To_District" id="hd_endDistrict" />
+                            <input type="hidden" name="To_Location" id="hd_endLocation" />
+                            <input type="hidden" name="To_Longitude" id="hd_endLongitude" />
+                            <input type="hidden" name="To_Latitude" id="hd_endLatitude" />
+
+                        </form>
+                    </div>
+                    @*<div style="text-align: center; padding: 5px">
+                        <a href="javascript:void(0)" id="btn_publish" class="easyui-linkbutton" onclick="submitForm(this)">发布</a>
+                        <a href="javascript:void(0)" id="btn_clear" class="easyui-linkbutton" onclick="clearForm(this)">清空</a>
+                    </div>*@
+                </div>
+            </div>
+            <div data-options="region:'center',border:true ,split:true">
+                <div class="easyui-panel" data-options="border:false" title="地图">
+                    <div>
+                        <div id="dvLocalCity"></div>
+                    </div>
+                    <input type="button" class="routeDriving" style="width: 80px; height: 60px" value="路线解析" />
+                    <div id="allmap" style="width: auto; height: 500px"></div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="dv_map_dlg" class="easyui-dialog" style="width: 800px; height: 400px"
+    data-options="title:'地址选择',buttons:'#bbmap',modal:true,closed:true,resizable:true">
+    <div id="dv_map_dlg_content" style="width: auto; height: 500px"></div>
+</div>
+<div id="bbmap">
+    <a href="javascript:void(0)" class="easyui-linkbutton" id="dv_map_dlg_save">保存</a>
+    <a href="javascript:void(0)" class="easyui-linkbutton" id="dv_map_dlg_close">关闭</a>
+</div>
+
+<div id="dv_user_search_dlg" class="easyui-dialog" style="width: 600px; height: 300px"
+    data-options="title:'用户选择',buttons:'#bbuser',modal:true,closed:true">
+    <input class="easyui-searchbox" id="ip_userSearch" data-options="prompt:'输入昵称或手机',menu:'#mmuser',searcher:doSearchUser" style="width: 300px" />
+    <p id="pSearchLoading" style="display: none">正在查询...</p>
+    <table id="userpg"></table>
+    <div id="mmuser" style="width: 120px">
+        <div data-options="name:'nickname'">昵称</div>
+        <div data-options="name:'mobile'">手机</div>
+    </div>
+</div>
+<div id="bbuser">
+    <a href="javascript:void(0)" class="easyui-linkbutton" id="dv_user_search_dlg_confirm">确认</a>
+    <a href="javascript:void(0)" class="easyui-linkbutton" id="dv_user_search_dlg_close">关闭</a>
+</div>
+
+
+
+<script>
+    function doSearchUser(value, name) {
+        if (value == "") {
+            alert('请输入查询呢内容');
+            return;
+        }
+
+        $('#pSearchLoading').show();
+        var keyValue = '?' + name + '=' + value;
+        $.getJSON('/user/getuser' + keyValue)
+        .done(function (data) {
+            tempElementUserId = data.id;
+            tempElementUserNickName = data.nickname;
+            var rowOne = {
+                name: '昵称',
+                value: data.nickname,
+                group: '用户信息',
+                editor: 'text'
+            };
+            var rowTwo = {
+                name: '手机',
+                value: data.mobile,
+                group: '用户信息',
+                editor: 'text'
+            };
+            var rows = $('#userpg').propertygrid('getRows');
+            if (rows.length > 1) {
+                $('#userpg').propertygrid('deleteRow', 1);
+                $('#userpg').propertygrid('deleteRow', 0);
+            }
+            $('#userpg').propertygrid('appendRow', rowOne);
+            $('#userpg').propertygrid('appendRow', rowTwo);
+        })
+        .fail(function (jqxhr, textStatus, error) {
+            var err = textStatus + ", " + error;
+            alert("请求失败: " + err);
+        })
+        .always(function () {
+            $('#pSearchLoading').fadeOut(100);
+        });
+    }
+
+    $('#userpg').propertygrid({
+        showGroup: true,
+        scrollbarSize: 0,
+    });
+
+    $('#dv_user_search_dlg_confirm').on('click', function () {
+        $('#dv_user_search_dlg').dialog('close');
+        $('#hd_userid').val(tempElementUserId);
+        $('#ip_User').val(tempElementUserNickName);
+        $('#ip_User').trigger('focus');
+    });
+
+
+    $('#dv_user_search_dlg_close').on('click', function () {
+        $('#dv_user_search_dlg').dialog('close');
+    });
+
+
+    $('#ff').form({
+        onSubmit: function () {
+            showProcess();
+            //$.messager.progress();
+        },
+        success: function (data) {
+            var jsonObj = JSON.parse(data);
+            var msg = jsonObj.Message;
+            var code = jsonObj.StatusCode;
+            //$.messager.progress('close');
+            closeProcess();
+            var infoIcon = 'info';
+            switch (code) {
+                case 200:
+                    infoIcon = 'info';
+                    slideShow('提示','有一条新路线发布,请查看路线列表', 8000);
+                    break;
+                case 400:
+                    infoIcon = 'error'
+                    break;
+                case 500:
+                    infoIcon = 'warning'
+                    break;
+                default:
+                    break;
+            }
+            showAlertMsg('提示', msg, infoIcon);
+            //$.messager.alert('提示', msg, infoIcon);
+        }
+    });
+
+    //function SlideMessage(message, timeout) {
+    //    $.messager.show({
+    //        title: '新信息',
+    //        msg: message,
+    //        timeout: timeout,
+    //        showType: 'slide'
+    //    });
+    //}
+
+    function clearForm() {
+        $('#ff').form('clear');
+    }
+
+</script>
+
+
+ @Html.Partial("_OrderWorker"); 

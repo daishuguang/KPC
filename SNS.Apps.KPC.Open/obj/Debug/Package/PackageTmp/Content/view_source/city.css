@@ -1,0 +1,91 @@
+﻿body, ul, li, span, h1, h2, h3, h4, h5, h6 {
+    margin: 0px;
+    padding: 0px;
+    border: 0px;
+}
+
+input[type="text"] {
+    font-size: 16px;
+}
+
+
+ul {
+    list-style: none;
+    width: 100%;
+    overflow: hidden;
+}
+
+    ul li:active {
+        background-color: #eee;
+    }
+
+span, a {
+    display: inline-block;
+}
+/* global css */
+
+#header, li.search {
+    line-height: 40px;
+    height: 40px;
+}
+
+#header {
+    position: relative;
+    border-bottom: 1px solid #009900;
+}
+
+    #header a {
+        padding: 0 10px;
+    }
+
+ul.city_lst li {
+    float: left;
+    width: 33.3%;
+    text-align: center;
+    color: #394b59;
+}
+
+    ul.city_lst li a {
+        display: block;
+        color: #394b59;
+        height: 50px;
+        line-height: 50px;
+        border-right: 1px dashed #d8d8d8;
+        border-bottom: 1px dashed #d8d8d8;
+    }
+
+h3 {
+    height: 40px;
+    line-height: 40px;
+    padding: 0px 10px;
+    background-color: green;
+    color: white;
+}
+
+ul.letters_lst li {
+    float: left;
+    width: 16.6%;
+    text-align: center;
+    color: #394b59;
+}
+
+    ul.letters_lst li a {
+        display: block;
+        height: 50px;
+        line-height: 50px;
+        border-right: 1px dashed #d8d8d8;
+        border-bottom: 1px dashed #d8d8d8;
+        color: #394b59;
+    }
+
+h4 {
+    padding: 0px 10px;
+    background-color: #f0f0f0;
+    color: #333;
+    height: 30px;
+    line-height: 30px;
+}
+
+#navbar:active, #backbtn:active {
+    background-color: #005801;
+}

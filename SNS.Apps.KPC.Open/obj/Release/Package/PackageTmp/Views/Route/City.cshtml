@@ -1,0 +1,111 @@
+﻿@{
+    ViewBag.Title = "快拼车";
+    Layout = "~/Views/Shared/_LayoutList.cshtml";
+}
+@section head{
+    @Styles.Render("~/Content/route/city")
+}
+
+<div id="city_box" style="min-height:300px">
+    <div class="header">
+        <span id="backbtn" class="backbtn">
+        </span>
+        <div class="headertitle">热门城市</div>
+    </div><!-- navbar -->
+    <ul id="hotcity" class="city_lst">
+        <li>
+            <a href="javascript:;" onclick="showWait();">北京市</a>
+        </li>
+        <li>
+            <a href="javascript:;" onclick="showWait();">上海市</a>
+        </li>
+        <li>
+            <a href="javascript:;" onclick="showWait();">成都市</a>
+        </li>
+        <li>
+            <a href="javascript:;" onclick="showWait();">杭州市</a>
+        </li>
+        <li>
+            <a href="javascript:;" onclick="showWait();">广州市</a>
+        </li>
+        <li>
+            <a href="javascript:;" onclick="showWait();">深圳市</a>
+        </li>
+        <li>
+            <a href="javascript:;" onclick="showWait();">重庆市</a>
+        </li>
+        <li>
+            <a href="javascript:;" onclick="showWait();">武汉市</a>
+        </li>
+        <li>
+            <a href="javascript:;" onclick="showWait();">南京市</a>
+        </li>
+        <li>
+            <a href="javascript:;" onclick="showWait();">石家庄市</a>
+        </li>
+        <li>
+            <a href="javascript:;" onclick="showWait();">天津市</a>
+        </li>
+        <li>
+            <a href="javascript:;" onclick="showWait();">青岛市</a>
+        </li>
+    </ul>
+    <h3>选择城市拼音首字母</h3>
+    <ul id="letterlist" class="letters_lst">
+        <li><a href="#citylist">A</a></li>
+        <li><a href="#citylist">B</a></li>
+        <li><a href="#citylist">C</a></li>
+        <li><a href="#citylist">D</a></li>
+        <li><a href="#citylist">E</a></li>
+        <li><a href="#citylist">F</a></li>
+        <li><a href="#citylist">G</a></li>
+        <li><a href="#citylist">H</a></li>
+        <li><a href="#citylist">J</a></li>
+        <li><a href="#citylist">K</a></li>
+        <li><a href="#citylist">L</a></li>
+        <li><a href="#citylist">M</a></li>
+        <li><a href="#citylist">N</a></li>
+        <li><a href="#citylist">P</a></li>
+        <li><a href="#citylist">Q</a></li>
+        <li><a href="#citylist">R</a></li>
+        <li><a href="#citylist">S</a></li>
+        <li><a href="#citylist">T</a></li>
+        <li><a href="#citylist">W</a></li>
+        <li><a href="#citylist">X</a></li>
+        <li><a href="#citylist">Y</a></li>
+        <li><a href="#citylist">Z</a></li>
+    </ul>
+    <div id="citylist">
+        <h4 id="h">
+            A
+        </h4>
+        <ul id="cities" class="city_lst">
+            <li><a href="javascript:;" onclick="showWait();">阿城市</a></li>
+            <li><a href="javascript:;" onclick="showWait();">阿克苏市</a></li>
+            <li><a href="javascript:;" onclick="showWait();">阿勒泰市</a></li>
+            <li><a href="javascript:;" onclick="showWait();">安达市</a></li>
+            <li><a href="javascript:;" onclick="showWait();">安国市</a></li>
+            <li><a href="javascript:;" onclick="showWait();">安康市</a></li>
+            <li><a href="javascript:;" onclick="showWait();">安陆市</a></li>
+            <li><a href="javascript:;" onclick="showWait();">安宁市</a></li>
+            <li><a href="javascript:;" onclick="showWait();">安庆市</a></li>
+            <li><a href="javascript:;" onclick="showWait();">安丘市</a></li>
+            <li><a href="javascript:;" onclick="showWait();">鞍山市</a></li>
+            <li><a href="javascript:;" onclick="showWait();">安顺市</a></li>
+            <li><a href="javascript:;" onclick="showWait();">安阳市</a></li>
+            <li><a href="javascript:;" onclick="showWait();">阿图什市</a></li>
+            <li><a href="javascript:;" onclick="showWait();">阿尔山市</a></li>
+        </ul>
+        <div id="shade" style="text-align:center;display:none">
+            <img src="~/Content/images/loading.gif" />正在加载中...
+        </div><!-- /Shade -->
+    </div>
+</div>
+
+@RenderPage("/Views/Shared/_Footer.cshtml")
+<script id="city_template" type="text/template">
+    <% _.each(datas, function(items) { %>
+    <li><a href="javascript:;" onclick="showWait();"><%= items %></a></li>
+    <% }); %>
+</script>
+@Scripts.Render("~/bundles/route/city")

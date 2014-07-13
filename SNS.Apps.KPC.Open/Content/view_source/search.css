@@ -1,0 +1,154 @@
+﻿body, ul, li, span, h1, h2, h3, h4, h5, h6, a, p {
+    margin: 0px;
+    padding: 0px;
+    border: 0px;
+}
+
+input[type="text"] {
+    font-size: 16px;
+}
+
+html {
+    width: 100%;
+    height: 100%;
+}
+
+@font-face {
+    font-family: "mobileicons";
+    src: url("/fonts/mobileicons.ttf") format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+    background-color: #fafafa;
+}
+
+
+input[type="text"] {
+    padding: 3px;
+    border: 1px solid rgb(238,238,238);
+    -webkit-appearance: none;
+}
+
+select {
+    padding: 5px 0px;
+}
+
+ul {
+    list-style: none; /*很重要*/
+    width: 100%;
+    overflow: hidden; /*很重要*/
+    text-align: left;
+}
+
+span, a {
+    display: inline-block;
+}
+/* global css */
+
+li.search {
+    line-height: 50px;
+    height: 50px;
+}
+
+ul#searchzone li {
+    padding: 0px 10px;
+    position: relative;
+    border-bottom: 1px solid #ccc;
+}
+
+span.title {
+    min-width: 15%;
+}
+
+li select {
+    width: 35%;
+}
+
+#sxb, #ct {
+    color: green;
+}
+
+    #sxb.active, #ct.active {
+        border-bottom: 1px solid #ccc;
+        background-color: #f0f0f0;
+        border-top: none;
+        color: #8c8c8c;
+    }
+
+div.searchicon {
+    background-image: url(/Content/images/search.png);
+    background-repeat: no-repeat;
+    width: 30px;
+    height: 30px;
+    background-size: contain;
+    position: absolute;
+    bottom: 5px;
+    right: 10px;
+    vertical-align: top;
+    text-align: center;
+}
+
+li.ct, li.sxb {
+    display: none;
+}
+
+div.hideback {
+    display: none;
+}
+
+.zindex {
+    z-index: 1000;
+}
+
+#suggest li {
+    position: relative;
+}
+
+    #suggest li:active {
+        background-color: #eee;
+    }
+
+    #suggest li a {
+        border-bottom: 1px solid #808080;
+        color: #222222;
+        padding: 1em 10px;
+    }
+
+ul.hide {
+    display: none;
+}
+
+ul#searchresult {
+    text-align: left;
+}
+
+    ul#searchresult li {
+        /*border-bottom: 1px solid #ccc;*/
+        border-bottom: 1px solid #ddd;
+        border-top: 1px solid #fff;
+    }
+
+        ul#searchresult li a {
+            display: block;
+            padding: 0px 10px;
+            color: black;
+        }
+
+#wrapper.nav {
+    position: absolute;
+    left: 40%;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+
+#navbar:before {
+    /*content: "\e009";*/
+    content:url(/content/images/nav.png);
+}
+
+#navbar:active, #backbtn:active {
+    background-color: #005801;
+}

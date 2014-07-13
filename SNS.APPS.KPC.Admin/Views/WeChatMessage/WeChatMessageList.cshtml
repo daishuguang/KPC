@@ -1,0 +1,113 @@
+﻿@{
+    ViewBag.Title = "用户微信详细列表";
+}
+
+<link href="~/easyui/themes/metro-blue/easyui.css" rel="stylesheet" />
+<link href="~/easyui/themes/icon.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-2.0.3.min.js"></script>
+<script src="~/easyui/jquery.easyui.js"></script>
+<script src="~/easyui/locale/easyui-lang-zh_CN.js"></script>
+<script src="~/Scripts/common/snsglobal.js"></script>
+
+<script>
+    $(document).ready(function () {
+        var isReloadNewData = true;
+        $('.pp').pagination({
+            onSelectPage: function (pageNumber, pageSize) {
+                isReloadNewData = false;
+                var searchStr = encodeURIComponent($('#ss').searchbox('getName') + ":" + $('#ss').searchbox('options')['value']);
+                $('.pp').pagination('loading');
+                $('.pp').pagination('refresh', {
+                    pageNumber: pageNumber
+                });
+                $('#content').panel('refresh', 'WeChatMessageDetails?page=' + pageNumber + '&rows=' + pageSize + '&search=' + searchStr);
+                $('.pp').pagination('loaded');
+            }
+        });
+
+        $('#content').panel({
+            onLoad: function () {
+                if (isReloadNewData)
+                    refreshPagination();
+            }
+        });
+
+        $('#ss').searchbox({
+            searcher: function (value, name) {
+                var searchStr = encodeURIComponent(name + ":" + value);
+                var pageSize = $('.pp').pagination('options')['pageSize'];
+                var pageNumber = $('.pp').pagination('options')['pageNumber'];
+                isReloadNewData = true;
+                $('#content').panel('refresh', 'WeChatMessageDetails?search=' + searchStr);
+            },
+            menu: '#mm',
+            prompt: '请输入搜索内容'
+        });
+
+        $('.searchClear').on('click', function () {
+            window.location.reload();
+        });
+    });
+
+    function refreshPagination() {
+        var totals = $('.totals').val();
+        $('.pp').pagination('refresh', {
+            total: totals,
+            pageNumber: 1
+        });
+    }
+</script>
+
+@*<div style="margin: 10px 0;"></div>*@
+<div id="ccmain" class="easyui-layout" data-options="fit:true">
+    <div data-options="region:'north'" style="height: 50px">
+    </div>
+     <div data-options="region:'south',split:true" style="height: 50px;">
+        <div style="margin-top: 5px; text-align: center">
+            <span style="color: gray" > 快拼车系统后台<br />
+                建议使用Chrome或者FireFox浏览器浏览<br />
+               
+            </span>
+        </div>
+    </div>
+    <div data-options="region:'east',split:true,collapsed:true" title="附加信息" style="width: 400px;">
+        <div class="eastInfo">
+            <table style="width: 400px;" id="dgUserRoute"></table>
+        </div>
+    </div>
+    <div data-options="region:'west',split:true" title="菜单" style="width: 150px;">
+        <ul style="list-style-type: none; padding-left: 10px">
+            <li>@Html.ActionLink("路线", "Index", "Route")</li>
+            <li>@Html.ActionLink("发布路线", "PublishRoute", "Route")</li>
+            <li>@Html.ActionLink("用户微信记录", "Index", "WeChatMessage")</li>
+            <li>@Html.ActionLink("用户微信详细列表", "WeChatMessageList", "WeChatMessage")</li>
+            <li>@Html.ActionLink("订单列表", "Index", "Order")</li>
+            <li>@Html.ActionLink("系统配置", "Index", "Configuration")</li>
+        </ul>
+
+    </div>
+    <div data-options="region:'center',title:'快拼车管理中心',iconCls:'icon-ok'">
+        <div class="sns-info">
+            <div class="sns-tip icon-tip"></div>
+            <div>用户微信详细列表</div>
+        </div>
+
+        <input id="ss" style="width: 400px;" />
+        <div id="mm" style="width: 120px">
+            <div data-options="name:'MsgContent',iconCls:'icon-ok',selected:true">微信内容</div>
+            <div data-options="name:'MsgType'">微信类型</div>
+            <div data-options="name:'NickName'">用户名</div>
+        </div>
+        <a href="#" class="easyui-linkbutton searchClear" style="overflow: hidden">清除</a>
+        <div class="easyui-pagination pp" style="border: 1px solid #ccc;"></div>
+        <div id="content" class="easyui-panel" style="height: auto; width: 1200px;"
+            data-options="href:'WeChatMessageDetails'">
+        </div>
+        <div class="easyui-pagination pp" style="border: 1px solid #ccc;"></div>
+    </div>
+
+
+</div>
+
+
+@Html.Partial("_OrderWorker"); 

@@ -1,0 +1,155 @@
+﻿@{
+    ViewBag.Title = "路线";
+}
+
+
+<link href="~/easyui/themes/metro-blue/easyui.css" rel="stylesheet" />
+<link href="~/easyui/themes/icon.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-2.0.3.min.js"></script>
+<script src="~/easyui/jquery.easyui.js"></script>
+<script src="~/easyui/locale/easyui-lang-zh_CN.js"></script>
+<script src="~/Scripts/common/snsglobal.js"></script>
+
+<script>
+    $().ready(function () {
+        $('#routedg').datagrid({
+            url: '@Url.Action("GetRoutesData", "Route")',
+            method: 'get',
+            //border: false,
+            singleSelect: true,
+            //fitColumns: true,
+            toolbar: '#tb',
+            rownumbers: true,
+            pagination: true,
+            columns: [[
+                { field: 'ID', title: 'ID', sortable: true, width: 40 },
+                {
+                    field: 'RouteType', title: '路线类型', sortable: true, width: 40,
+                    formatter: function (value, row, index) {
+                        if (value == 0) {
+                            return "上下班"
+                        } else {
+                            return "长途";
+                        }
+                    }
+                },
+                { field: 'PublisherID', width: 40, sortable: true, title: '用户ID' },
+                { field: 'PublisherNickName', sortable: true, title: '用户昵称' },
+                { field: 'PublisherMobile', sortable: true, title: '用户手机号' },
+                {
+                    field: 'PublisherRoleType', sortable: true, title: '用户类型',
+                    formatter: function (value, row, index) {
+                        if (value == 0) {
+                            return "乘客"
+                        } else {
+                            return "司机";
+                        }
+                    }
+                },
+                { field: 'From_Province', sortable: true, title: '出发省', width: 80 },
+                { field: 'From_City', sortable: true, title: '出发市', width: 80 },
+                { field: 'From_District', sortable: true, title: '出发地区', width: 80 },
+                { field: 'From_Location', sortable: true, title: '出发地址' },
+                { field: 'To_Province', sortable: true, title: '目的省', width: 80 },
+                { field: 'To_City', sortable: true, title: '目的市', width: 80 },
+                { field: 'To_District', sortable: true, title: '目的地区', width: 80 },
+                { field: 'To_Location', sortable: true, title: '目的地址' },
+                { field: 'Charge', sortable: true, title: '小费' },
+                {
+                    field: 'StartDate', sortable: true, title: '出发时间',
+                    formatter: function (value, row, index) {
+                        if (value == ""|| value == undefined)
+                            return "";
+                        var date = ConvertJSONDateToJSDateObject(value);
+                        var formattedDate = getDateTime(date);
+                        return formattedDate;
+                    }
+                },
+                {
+                    field: 'CreateDate', sortable: true, title: '创建时间',
+                    formatter: function (value, row, index) {
+                        if (value == "" || value == undefined)
+                            return "";
+                        var date = ConvertJSONDateToJSDateObject(value);
+                        var formattedDate = getDateTime(date);
+                        return formattedDate;
+                    }
+                },
+
+            ]]
+        });
+    });
+</script>
+
+@*<div style="margin: 10px 0;"></div>*@
+<div class="easyui-layout" data-options="fit:true">
+    <div data-options="region:'north'" style="height: 50px">
+    </div>
+     <div data-options="region:'south',split:true" style="height: 50px;">
+        <div style="margin-top: 5px; text-align: center">
+            <span style="color: gray" > 快拼车系统后台<br />
+                建议使用Chrome或者FireFox浏览器浏览<br />
+               
+            </span>
+        </div>
+    </div>
+    <div data-options="region:'east',split:true,collapsed:true" title="附加信息" style="width: 180px;"></div>
+    <div data-options="region:'west',split:true" title="菜单" style="width: 150px;">
+        <ul style="list-style-type: none; padding-left: 10px">
+            <li>@Html.ActionLink("路线", "Index", "Route")</li>
+            <li>@Html.ActionLink("发布路线", "PublishRoute", "Route")</li>
+            <li>@Html.ActionLink("用户微信记录", "Index", "WeChatMessage")</li>
+            <li>@Html.ActionLink("用户微信详细列表", "WeChatMessageList", "WeChatMessage")</li>
+            <li>@Html.ActionLink("订单列表", "Index", "Order")</li>
+            <li>@Html.ActionLink("系统配置", "Index", "Configuration")</li>
+        </ul>
+
+    </div>
+    <div data-options="region:'center',title:'快拼车管理中心',iconCls:'icon-ok'">
+        <div class="sns-info">
+            <div class="sns-tip icon-tip"></div>
+            <div>路线数据</div>
+        </div>
+        @* <table id="routedg" class="easyui-datagrid" 
+            data-options="toolbar:'#tb',url:'@Url.Action("GetRoutesData", "Route")',method:'get',border:false,singleSelect:true,fitColumns:true,rownumbers:true,pagination:true" >
+            <thead>
+                <tr>
+                    <th data-options="field:'ID'" sortable="true">ID</th>
+                    <th data-options="field:'RouteTypeContent'" sortable="true">路线类型</th>
+                    <th data-options="field:'PublisherID'" sortable="true">用户ID</th>
+                    <th data-options="field:'PublisherNickName'" sortable="true">用户昵称</th>
+                    <th data-options="field:'PublisherMobile'" sortable="true">用户手机</th>
+                    <th data-options="field:'PublisherRole'" sortable="true">用户类型</th>
+                    <th data-options="field:'From_Province',width:80" sortable="true">出发省市</th>
+                    <th data-options="field:'From_City',width:80" sortable="true">出发城市</th>
+                    <th data-options="field:'From_District',width:80" sortable="true">出发地区</th>
+                    <th data-options="field:'From_Location'" sortable="true">出发位置</th>
+                    <th data-options="field:'To_Province',width:80" sortable="true">目的省市</th>
+                    <th data-options="field:'To_City',width:80" sortable="true">目的城市</th>
+                    <th data-options="field:'To_District',width:80" sortable="true">目的地区</th>
+                    <th data-options="field:'To_Location'" sortable="true">目的位置</th>
+                    <th data-options="field:'Charge'" sortable="true">小费</th>
+                    <th data-options="field:'StartDate'" sortable="true">出发时间</th>
+                    <th data-options="field:'CreateDate'" sortable="true">创建时间</th>
+                </tr>
+            </thead>
+        </table>*@
+        <table id="routedg"></table>
+        <div id="tb" style="padding: 5px; height: auto">
+            <div style="margin-bottom: 5px">
+                <a href="#" class="easyui-linkbutton" iconcls="icon-add" plain="true">添加</a>
+                <a href="#" class="easyui-linkbutton" iconcls="icon-edit" plain="true">编辑</a>
+                <a href="#" class="easyui-linkbutton" iconcls="icon-save" plain="true">保存</a>
+                <a href="#" class="easyui-linkbutton" iconcls="icon-remove" plain="true">删除</a>
+            </div>
+            @*<div>
+                <a href="#" class="easyui-linkbutton" iconcls="icon-search">搜索</a>
+            </div>*@
+
+        </div>
+    </div>
+</div>
+
+
+
+@Html.Partial("_OrderWorker"); 

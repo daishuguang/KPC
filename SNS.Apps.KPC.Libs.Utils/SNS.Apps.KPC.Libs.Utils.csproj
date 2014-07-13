@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{7899DE2B-4FB4-40CC-BC76-28F854FB5004}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SNS.Apps.KPC.Libs.Utils</RootNamespace>
+    <AssemblyName>SNS.Apps.KPC.Libs.Utils</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="log4net">
+      <HintPath>..\..\Dlls\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Caching" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Activation" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CommonUtility.cs" />
+    <Compile Include="Extensions.cs" />
+    <Compile Include="Logger\Base\Logger.cs" />
+    <Compile Include="Logger\Base\LogMessage.cs" />
+    <Compile Include="Logger\Layout\CustomPatternLayout.cs" />
+    <Compile Include="Logger\DBLogger.cs" />
+    <Compile Include="Logger\FileLogger.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Logger\Pattern\Base\CustomPatternConverter.cs" />
+    <Compile Include="Logger\Pattern\BrowserPatternConverter.cs" />
+    <Compile Include="Logger\Pattern\MessagePatternConverter.cs" />
+    <Compile Include="Logger\Pattern\UserAgentPatternConverter.cs" />
+    <Compile Include="Logger\Pattern\HostNamePatternConverter.cs" />
+    <Compile Include="Logger\Pattern\UserNamePatternConverter.cs" />
+    <Compile Include="Logger\Pattern\UserIDPatternConverter.cs" />
+    <Compile Include="Logger\Pattern\UrlPatternConverter.cs" />
+    <Compile Include="Logger\Pattern\XPatternLayoutConverter.cs" />
+    <Compile Include="ValidationCoder.cs" />
+    <Compile Include="WebClientUtility.cs" />
+    <Compile Include="MemCacheWrapper.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WCFServiceConnectionPooling.cs" />
+    <Compile Include="WCFServiceClientUtility.cs" />
+    <Compile Include="WCFServiceHostUtility.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SNS.Apps.KPC.Libs.Configurations\SNS.Apps.KPC.Libs.Configurations.csproj">
+      <Project>{64876bc5-0f52-457b-9c5f-613532887c02}</Project>
+      <Name>SNS.Apps.KPC.Libs.Configurations</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

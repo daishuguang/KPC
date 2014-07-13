@@ -1,0 +1,276 @@
+﻿@{
+    if (HttpContext.Current.Request.UserAgent.Contains("kuaipinche"))
+    {
+        ViewBag.Title = "路线编辑";
+    }
+    else
+    {
+        ViewBag.Title = "快拼车";
+    }
+    Layout = "~/Views/Shared/_LayoutList.cshtml";
+}
+
+@model SNS.Apps.KPC.Libs.Models.UserRouteResult
+@using SNS.Apps.KPC.Libs.Models
+@using SNS.Apps.KPC.Libs.Utils
+@using SNS.Apps.KPC.Libs.Configurations
+
+@section head{
+    @Styles.Render("~/Content/route/create")
+    <style>
+        body {
+            background-color: white;
+        }
+
+        p {
+            font-size: 14px;
+            margin: 5px;
+        }
+
+        input[type="text"], textarea {
+            -webkit-appearance: none;
+            border: none;
+        }
+
+        .div_c1 {
+            padding: 0px 10px;
+            border: 1px solid #cacaca;
+            border-top: none;
+        }
+
+        #wrapper ul li {
+            border: none;
+        }
+
+        #wrapper input[type="text"], #wrapper input[type="password"] {
+            border: none;
+            box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            width: 100%;
+            padding: 5px;
+            box-shadow: none;
+            -webkit-appearance: none;
+        }
+
+        input[type="button"], input[type="button"]:visited {
+            /*
+            background: -webkit-gradient(linear, 0% 0, 0% 100%, from(#0faf0f), to(#008001));
+                */
+            background-color: #2f8d13;
+            border: 1px solid #008001;
+            box-shadow: rgba(255, 255, 255, 0.298039) 0px 1px 0px 0px inset, rgb(204, 204, 204) 1px 1px 4px 0px;
+            border-radius: 3px;
+        }
+
+            input[type="button"]:active {
+                /*
+                background: -webkit-gradient(linear, 0% 0, 0% 100%, from(#005801), to(#008001));
+                    */
+            }
+
+        .arrow_right::after {
+            content: ' ';
+            position: absolute;
+            width: 9px;
+            height: 14px;
+            top: 40%;
+            right: 25px;
+            background: url("/Content/images/arrow_right.png") -9px 0 no-repeat;
+        }
+
+        .f13 {
+            font-size: 13px;
+        }
+
+        #fromcity_div:active, #tocity_div:active, #fromcity:active, #tocity:active {
+            background-color: #eee;
+        }
+    </style>
+}
+
+<div id="wrapper">
+    <div class="header" style="@(HttpContext.Current.Request.UserAgent.Contains("kuaipinche") ?"display:none":"")">
+        <span id="backbtn" class="backbtn"></span>
+        <div class="headertitle">路线编辑</div>
+    </div><!-- navbar -->
+    @using (Html.BeginForm(new { ReturnUrl = @ViewBag.ReturnUrl }))
+    {
+        @Html.AntiForgeryToken()
+
+        @Html.HiddenFor(m => m.Route.RouteGUID)
+        @Html.HiddenFor(m => m.Route.RouteType)
+        @Html.HiddenFor(m => m.UserRole)
+        @Html.HiddenFor(m => m.Route.From_Province, new { id = "from_province" })
+        @Html.HiddenFor(m => m.Route.From_District, new { id = "from_district" })
+        @Html.HiddenFor(m => m.Route.To_Province, new { id = "to_province" })
+        @Html.HiddenFor(m => m.Route.To_District, new { id = "to_district" })
+        @Html.HiddenFor(m => m.Route.From_Point.Longitude, new { id = "from_lng" })
+        @Html.HiddenFor(m => m.Route.From_Point.Latitude, new { id = "from_lat" })
+        @Html.HiddenFor(m => m.Route.To_Point.Longitude, new { id = "to_lng" })
+        @Html.HiddenFor(m => m.Route.To_Point.Latitude, new { id = "to_lat" })
+
+        <!--
+        <ul style="display:-webkit-box;text-align:center">
+            <li style="width: 50%; box-sizing: border-box;border:1px solid gray;border-top:none;border-left:none; height:40px; line-height:40px;">
+                上下班
+            </li>
+            <li style="width: 50%; box-sizing: border-box; background-color: #cacaca; height: 40px; line-height: 40px; ">
+                长途
+            </li>
+        </ul>-->
+        <ul>
+            <li class="search">
+                <div onclick="showWait();" id="fromcity_div" class="div_c1 arrow_right" style="border-top:1px solid #cacaca;margin-top:10px;">
+                    <span class="title">城市</span>
+                    @Html.TextBoxFor(model => model.Route.From_City, new { Readonly = "readonly", id = "fromcity", style = "width:70%;", placeholder = "选择起点城市" })
+                </div>
+            </li>
+            <li class="search">
+                <div class="div_c1 arrow_right">
+                    <span class="title">起点</span>
+                    @Html.TextBoxFor(model => model.Route.From_Location, new { Readonly = "readonly", placeholder = "请输入起点(选填)", style = "width:70%", id = "from_map", Class = "mapvalue" })
+                </div>
+            </li>
+            <li class="search" @(Model.Route.From_City == Model.Route.To_City ? "style=display:none;" : "")>
+                <div id="tocity_div" class="div_c1 arrow_right" style="border-top:1px solid #cacaca;margin-top:10px;">
+                    <span class="title">城市</span>
+                    @Html.TextBoxFor(model => model.Route.To_City, new { Readonly = "readonly", id = "tocity", style = "width:70%;", placeholder = "选择起点城市" })
+                </div>
+            </li>
+            <li class="search">
+                <div class="div_c1 arrow_right">
+                    <span class="title">终点</span>
+                    @Html.TextBoxFor(model => model.Route.To_Location, new { Readonly = "readonly", placeholder = "请输入终点(选填)", id = "to_map", style = "width:70%", Class = "mapvalue" })
+                </div>
+            </li>
+            <li class="search">
+                <div class="div_c1" style="border-top:1px solid #cacaca;margin-top:10px;">
+                    <input type="radio" name="daysection" @(Model.Route.RouteType == RouteType.Citywide_Workday || Model.Route.RouteType == RouteType.Intercity_Workday ? "checked='checked'" : "") id="workday" value="1" />工作日
+                    <input type="radio" name="daysection" @(Model.Route.RouteType == RouteType.Citywide_Weekend || Model.Route.RouteType == RouteType.Intercity_Weekend ? "checked='checked'" : "") id="twoday" value="2" />周末
+                    <input type="radio" name="daysection" @(Model.Route.RouteType == RouteType.Citywide_Temp || Model.Route.RouteType == RouteType.Intercity_Temp ? "checked='checked'" : "") id="tempday" value="4" />临时
+                    <input type="radio" name="daysection" @(Model.Route.RouteType == RouteType.Citywide_EveryDay || Model.Route.RouteType == RouteType.Intercity_EveryDay ? "checked='checked'" : "") id="eachday" value="8" />每天
+                </div>
+            </li>
+            @if ((((int)Model.Route.RouteType & 0x10) != 0))
+            {
+                <li id="sxb_date" class="search">
+                    <div class="div_c1">
+                        <span class="title">时间</span>
+                        <input type="text" value="@ViewBag.StartDate_Date" name="startdate_date_temp" id="startdate_date_temp" @(Model.Route.RouteType == RouteType.Citywide_Temp ? "style=width:35%" : "style=display:none;width:35%") />
+                        <input type="text" value="@ViewBag.StartDate_Time" name="startdate_time" id="StartDate_Time" placeholder="请输入出发时间" @(Model.Route.RouteType == RouteType.Citywide_Temp ? "style=width:35%;" : "style=width:70%") />
+                    </div>
+                </li>
+            }
+            else
+            {
+                <li id="ct_date" class="@(Model.Route.RouteType == RouteType.Intercity_Temp ? "search" : "search ct")">
+                    <div class="div_c1">
+                        <span class="title">日期</span>
+                        <input type="text" value="@ViewBag.StartDate_Date" name="startdate_date" id="StartDate_Date" placeholder="请输入出发日期" style="width:70%;" />
+                    </div>
+                </li>
+            }
+            @if (Model.UserRole == UserRole.Driver)
+            {
+                <li class="search">
+                    <div class="div_c1">
+                        <span class="title">座位数</span>
+                        @Html.TextBoxFor(m => m.Route.SeatCount, new { id = "seatcount", placeholder = "座位数（选填）", style = "width:34%;", maxlength = "3" })&nbsp;<span class="f13">座</span>&nbsp;
+                    </div>
+                </li>
+                <li class="search">
+                    <div class="div_c1">
+                        <span class="title">拼车费用</span>
+                        @Html.TextBoxFor(m => m.Route.Charge, new { Value = (Model.Route.Charge.HasValue ? Model.Route.Charge.Value.ToString("#") : ""), id = "charge", placeholder = "面议", style = "width:34%", maxlength = "4" }) &nbsp; <span class="f13">元/人</span>
+                    </div>
+                </li>
+            }
+            <li>
+                <div class="div_c1">
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td width="23%"><span style="line-height:40px">备注</span></td>
+                            <td>
+                                @Html.TextAreaFor(model => model.Route.Note, new { placeholder = "请输入备注信息", style = "overflow-y:visible;border-color:rgb(238, 238, 238);width:100%;margin-top:5px;", Maxlength = "300", rows = "4" })
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </li>
+            <li style="text-align:center; border-bottom:none; margin-top:10px;">
+                <input onclick="showWait();" type="button" id="btn_submit" name="Submit" style="font-size:20px;font-weight:bold;width:100%;color:white;height:50px;" value="保存" />
+            </li>
+        </ul>
+    }
+</div>
+
+<div id="address" style="min-height:300px" class="hideback">
+    <div class="header">
+        <span id="backbtn2" class="backbtn">
+        </span>
+    </div>
+    <br />
+    <span style="padding:0px 10px;" id="cityown"></span>
+    <div style="padding:0px 10px;">
+        <table width="100%" style="table-layout:fixed">
+            <tr>
+                <td width="80%">
+                    <input type="text" style="border: 1px solid rgb(238,238,238);box-sizing:border-box; width: 100%; min-height: 1.4em; line-height: 1.4em;" placeholder="请输入详细地址" id="address_text" />
+                </td>
+                <td>
+                    <span id="btn_address" style="border-radius:3px;padding: 0.4em 0.5em;text-align:center; background-color: #009900;color:white;">确定</span>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <ul id="suggest"></ul>
+</div>
+@RenderPage("/Views/Shared/_Footer.cshtml")
+
+<script>
+    var KPC = KPC || {};
+    KPC.RouteEdit = {};
+    KPC.RouteEdit.RouteGuid = "@Model.Route.RouteGUID";
+    KPC.RouteEdit.RouteType = "@(Model.Route.From_City == Model.Route.To_City ? "sxb" : "ct")";
+</script>
+
+<script>
+    var urlstr = window.location.search.split("&");
+    if (urlstr.length === 4) {
+        var fromcity = urlstr[0].substr(urlstr[0].indexOf("=") + 1),
+            fromlocation = urlstr[1].substr(urlstr[1].indexOf("=") + 1),
+            tocity = urlstr[2].substr(urlstr[2].indexOf("=") + 1),
+            tolocation = urlstr[3].substr(urlstr[3].indexOf("=") + 1);
+        console.log("search: " + urlstr);
+        console.log("fromcity: " + fromcity);
+        console.log("fromcity: " + unescape(fromcity));
+        console.log("tocity: " + tocity);
+        console.log("tocity: " + unescape(tocity));
+        document.getElementById("fromcity").value = unescape(fromcity);
+        document.getElementById("from_map").value = unescape(fromlocation);
+        if (KPC.RouteEdit.RouteType === "sxb") {
+            document.getElementById("tocity").value = unescape(fromcity);
+        } else {
+            document.getElementById("tocity").value = unescape(tocity);
+        }
+        document.getElementById("to_map").value = unescape(tolocation);
+    }
+</script>
+
+
+<!-- / Baidu Map -->
+<div id="mapdiv" style="display:none"></div>
+@*<script type="text/javascript" src="@(string.Format(ConfigStore.MapAPISettings.Baidu_Map_URI, ConfigStore.MapAPISettings.MapAPIKey))"></script>*@
+<script src="/Scripts/view/baidu.js"></script>
+
+<script>
+    var KPC = KPC || {};
+    KPC.Tongcheng = "@(Model.Route.From_City == Model.Route.To_City ? "true" : "false")";
+</script>
+@Scripts.Render("~/bundles/route/edit")
+
+@if (!string.IsNullOrEmpty(ViewBag.ErrorMsg))
+{
+    <script type="text/javascript">alert("@ViewBag.ErrorMsg");</script>
+}

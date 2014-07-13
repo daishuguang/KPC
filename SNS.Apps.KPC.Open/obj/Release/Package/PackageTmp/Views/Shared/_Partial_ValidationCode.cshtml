@@ -1,0 +1,7 @@
+﻿<img id="imgValidationCode" src="@Url.Content("/user/validationcode")" title="点击更换验证码" style="vertical-align:middle; display: inline-block; height: 25px; line-height: 25px; border-radius: 3px;" onclick="changeValidationCode(this)" />
+
+<script type="text/javascript">
+    function changeValidationCode(obj) {
+        obj.src = "/user/validationcode?stamp=" + (new Date()).getTime();
+    }
+</script>

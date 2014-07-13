@@ -1,0 +1,182 @@
+﻿@model IEnumerable<SNS.Apps.KPC.Libs.Models.UserRouteResult>
+@using SNS.Apps.KPC.Libs.Models
+@using SNS.Apps.KPC.Libs.Configurations
+@using SNS.Apps.KPC.Libs.Utils
+@using SNS.Apps.KPC.Open.Extensions
+
+@{
+    Layout = "~/Views/Shared/_LayoutList.cshtml";
+    ViewBag.Title = @ViewBag.User.NickName;
+	ViewBag.CurrentPageUrl = HttpUtility.UrlEncode(HttpContext.Current.Request.Url.AbsolutePath);
+}
+
+@section head{
+    @Styles.Render("~/Content/route/listview")
+    <style>
+        .showPortrait {
+            width: 50px;
+            height: 50px;
+            vertical-align: middle;
+        }
+
+        .classPhone {
+            position: fixed;
+            bottom: 0px;
+            left: 0px;
+            right: 0px;
+            line-height: 30px;
+        }
+
+        .classEmpty {
+            padding: 0px 10px;
+            height: 30px;
+            line-height: 30px;
+        }
+    </style>
+}
+
+<div id="wrapper">
+    <div class="header">
+        <!--<span style="display: inline-block; padding: 0px 10px;">返回</span>-->
+        @{
+            ViewBag.ShowBackIcon = (HttpContext.Current.Request.UrlReferrer == null ? false : true);
+        }
+        <script>
+            var message = location.hash.indexOf("#flag") === -1 ? false : true;
+            var refernull = null;
+        </script>
+        <span class="backbtn" id="backbtn"></span>
+        @if (!ViewBag.ShowBackIcon)
+        {
+            <script>
+                refernull = true;
+            </script>
+        }
+        <div class="headertitle">用户资料</div>
+    </div><!-- navbar -->
+    <ul>
+        <li style="padding: 0px 10px; border-bottom: 1px solid #ccc; vertical-align: middle;">
+            <table style="width:100%;">
+                <tr>
+                    <td style="width:50px;">
+                        <a href="@(!string.IsNullOrEmpty(ViewBag.User.PortraitsUrl) ? ViewBag.User.PortraitsUrl : ConfigStore.CommonSettings.Portraits_ImageDefault)"><img class="showPortrait" src="@(!string.IsNullOrEmpty(ViewBag.User.PortraitsThumbUrl) ? ViewBag.User.PortraitsThumbUrl : ConfigStore.CommonSettings.Portraits_ImageDefault)" /></a>
+                    </td>
+                    <td>
+                        <p style="color: green; font-size: 18pt;">@ViewBag.User.NickName</p>
+                        @if (ViewBag.User.WeChatID != null && HttpContext.Current.Request.UserAgent.IndexOf("MicroMessenger") != -1)
+                        {
+                            <h2 style="background:url('/Content/images/wechat.png') 0 2px no-repeat;background-size:21px;text-indent:25px; font-size:14px;font-weight:normal;line-height:22px;">: <a id="weixin" style="text-indent:0px;" href="weixin://contacts/profile/@ViewBag.User.WeChatID">@ViewBag.User.WeChatID</a></h2>
+                        }
+                    </td>
+                </tr>
+            </table>
+        </li>
+    </ul>
+
+    @if (@Model != null)
+    {
+        <ul id="searchresult">
+            <li class="classEmpty">@(ViewBag.User.Gender != null ? (ViewBag.User.Gender ? "他的路线" : "她的路线") : "TA的路线")</li>
+
+            @if (Model.Count() == 0)
+            {
+                <li class="classEmpty">还没有发布过任何路线哦。。。</li>
+            }
+            else
+            {
+				foreach (var item in Model)
+				{
+                    <li>
+                        <a onclick="if (location.hash.indexOf('#w') === -1) showWait();" href="/route/view/@item.Route.RouteGUID?from_lng=0&from_lat=0&to_lng=0&to_lat=0&prevurl=@ViewBag.CurrentPageUrl#mp.weixin.qq.com">
+
+                            <table width="100%" cellspacing="0">
+                                <tr style="text-align: center; height:60px">
+                                    <td width="38%">
+                                        <span style="line-height:25px; font-weight:bold;">
+                                            @(item.Route.From_City == item.Route.To_City ? item.Route.From_District : item.Route.From_City)
+                                        </span>
+                                        <div style="line-height: 25px; font-size: 14px;">
+                                            @(item.Route.From_Location)
+                                        </div>
+                                    </td>
+                                    <td width="24%" style="font-size: 13px;color: #797979;">
+                                        @switch (item.Route.RouteType)
+                                        {
+                                            case RouteType.Citywide_Workday:
+                                                @(item.Route.StartDate.Value.ToString("工作日 HH:mm 出发"));
+                                                break;
+                                            case RouteType.Citywide_Weekend:
+                                            @(item.Route.StartDate.Value.ToString("周末 HH:mm 出发"));
+                                            break;
+                                            case RouteType.Citywide_Temp:
+                                            @(item.Route.StartDate.Value.ToString("MM月dd日 HH:mm 出发"));
+                                            break;
+                                            case RouteType.Citywide_EveryDay:
+                                            @(item.Route.StartDate.Value.ToString("每天 HH:mm 出发"));
+                                            break;
+                                            case RouteType.Intercity_Workday:
+                                            @("工作日 有效");
+                                            break;
+                                            case RouteType.Intercity_Weekend:
+                                            @("周末 有效");
+                                            break;
+                                            case RouteType.Intercity_Temp:
+                                            @(item.Route.StartDate.Value.ToString("MM月dd日 出发"));
+                                            break;
+                                            case RouteType.Intercity_EveryDay:
+                                            @("长期有效");
+                                            break;
+                                            default:
+                                            break;
+                                        }
+                                    </td>
+                                    <td width="38%">
+                                        <span style="line-height:25px; font-weight:bold;">
+                                            @(item.Route.From_City == item.Route.To_City ? item.Route.To_District : item.Route.To_City)
+                                        </span>
+                                        <div style="line-height: 25px; font-size: 14px;">
+                                            @(item.Route.To_Location)
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </a>
+                    </li>
+                }
+            }
+        </ul>
+    }
+    @RenderPage("/Views/Shared/_Footer.cshtml")
+
+    <div style="line-height:30px;width:100%; height:62px;"></div>
+
+    @if (HttpContext.Current.User.Identity.IsAuthenticated && ViewBag.IsRegisterted && !string.IsNullOrEmpty(ViewBag.User.Mobile))
+    {
+        <div id="phoneNumberRegion" onclick="window.location.replace('tel:@ViewBag.User.Mobile')" class="classPhone" style="color:#ffcc00;opacity:1;padding-bottom:15px;padding-top:15px;background-color:#000;text-align:center;opacity:0.8">
+            <b style="font-size:15px;font-weight:bold;">点击拨打电话:</b>
+            <a href="javascript:;" style="color:#ffcc00; font-size:20px; text-decoration:none;font-weight:bold;">@ViewBag.User.Mobile</a>
+        </div>
+    }
+    else if (!string.IsNullOrEmpty(ViewBag.User.Mobile))
+    {
+        <div id="phoneNumberRegion" class="classPhone" style="color:#ffcc00;opacity:1;padding-bottom:15px;padding-top:15px;background-color:#000;text-align:center;opacity:0.8">
+            <a href="/user/login?returnurl=/user/viewprofile/@ViewBag.User.UserGUID" style="color:#ffcc00; font-size:15px; text-decoration:none;font-weight:bold;">点击"登录"后显示电话号码</a>
+        </div>
+    }
+</div>
+<script>
+    (function () {
+        document.getElementById("backbtn").addEventListener("click", function () {
+            if (refernull) {
+                if (message) {
+                    WeixinJSBridge.call("closeWindow");
+                } else {
+                    WeixinJSBridge.call("closeWindow");
+                    window.location.href = "/user/aroundlist";
+                }
+            } else {
+                history.back();
+            }
+        });
+    })();
+</script>

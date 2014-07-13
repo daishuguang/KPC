@@ -1,0 +1,91 @@
+﻿@model SNS.Apps.KPC.Libs.Models.UserResetModel
+
+@{
+    ViewBag.Title = "快拼车";
+    Layout = "~/Views/Shared/_LayoutList.cshtml";
+}
+
+@section head{
+    @Styles.Render("~/Content/route/regandedit")
+    <style>
+        #wrapper ul li {
+            border: none;
+        }
+
+        #wrapper input[type="text"], #wrapper input[type="password"] {
+            /*
+            display: flex;
+            line-height: 25px;
+            -webkit-box-flex: 1;
+            -moz-box-flex: 1;
+            -ms-flex: 1;
+            flex: 1;
+            */
+            box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            width: 100%;
+            padding: 9px;
+            box-shadow: none;
+            -webkit-appearance: none;
+        }
+
+        .verify_able, input[type="button"], input[type="button"]:visited, .verify_able:visited {
+            background-color: #2f8d13;
+            border: 1px solid #008001;
+            box-shadow: rgba(255, 255, 255, 0.298039) 0px 1px 0px 0px inset, rgb(204, 204, 204) 1px 1px 4px 0px;
+            /*
+            background: -webkit-gradient(linear, 0% 0, 0% 100%, from(#0faf0f), to(#008001));
+                */
+        }
+
+            input[type="button"]:active, .verify_able:active {
+                /*
+                background: -webkit-gradient(linear, 0% 0, 0% 100%, from(#005801), to(#008001));
+                    */
+            }
+
+        .verify_disable {
+            background-color: #9bdb9b;
+        }
+    </style>
+}
+
+<div id="wrapper">
+    <div class="header">
+        <span id="backbtn" class="backbtn">
+        </span>
+        <div class="headertitle">重置密码</div>
+    </div><!-- navbar -->
+    @using (Html.BeginForm(new { ReturnUrl = @ViewBag.ReturnUrl }))
+    {
+        <ul>
+            <li style="font-size:12px;color:gray;margin:5px 0px;">请在下面输入你要找回的帐号</li>
+            <li style=" margin: 5px 0px;">
+                @Html.TextBoxFor(m => m.Mobile, new { id = "txt_mobile", placeholder = "请输入手机号（必填）", required = "true", maxlength = "11", style = "width: 52%" })
+                <span id="txt_verifycode" class="verify_able" style="padding:3px 0px;display: inline-block; font-weight: normal; text-align:center; line-height: 30px; color: white; width: 45%; cursor:pointer;border-radius:3px;">免费发送验证码</span>
+            </li>
+            <li style="margin: 5px 0px;">
+                @Html.TextBoxFor(m => m.VerifyCode, new { id = "txt_mobile", placeholder = "请输入验证码（必填）", required = "true", maxlength = "4" })
+            </li>
+            <li style=" margin: 5px 0px;">
+                @Html.PasswordFor(m => m.Password, new { id = "txt_password1", placeholder = "请输入新密码（必填）", required = "true" })
+            </li>
+            <li style="margin: 5px 0px;">
+                @Html.PasswordFor(m => m.ConfirmPassword, new { id = "txt_password2", placeholder = "请再次输入新密码（必填）", required = "true" })
+            </li>
+
+            <li style="margin: 10px 0px;">
+                <input type="button" id="btn_submit" style="border-radius:3px;width:100%;font-size:20px;color:white;height:50px;" value="重置" />
+            </li>
+        </ul>
+    }
+</div>
+
+@RenderPage("/Views/Shared/_Footer.cshtml")
+@Scripts.Render("~/bundles/user/reset")
+
+@if (!string.IsNullOrEmpty(ViewBag.ErrorMsg))
+{
+    <script type="text/javascript">alert("@ViewBag.ErrorMsg");</script>
+}

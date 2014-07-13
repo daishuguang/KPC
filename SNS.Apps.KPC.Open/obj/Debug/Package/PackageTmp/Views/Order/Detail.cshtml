@@ -1,0 +1,536 @@
+﻿@model SNS.Apps.KPC.Libs.Models.UserOrderResult
+@using SNS.Apps.KPC.Libs.Models
+@using SNS.Apps.KPC.Libs.Utils
+
+@{
+    if (HttpContext.Current.Request.UserAgent.Contains("kuaipinche"))
+    {
+        ViewBag.Title = "拼单信息";
+    }
+    else
+    {
+        ViewBag.Title = "快拼车";
+    }
+    Layout = "~/Views/Shared/_LayoutList.cshtml";
+}
+
+@section head{
+    @Styles.Render("~/Content/route/regandedit")
+    <style>
+        p {
+            font-size: 14px;
+            margin: 5px;
+        }
+
+        .classPhone {
+            margin-top: 15px;
+            line-height: 30px;
+        }
+
+        #shade_bottom {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: gray;
+            opacity: 0.7;
+            filter: alpha(opacity=70);
+            -moz-opacity: 0.7;
+            z-index: 1001;
+        }
+
+        button {
+            width: 48%;
+            border: none;
+            height: 50px;
+            color: white;
+        }
+
+        input[type="button"] {
+            color: white;
+        }
+
+            input[type="button"], input[type="button"]:visited {
+                -webkit-appearance: none;
+                background-color: #2f8d13;
+                border: 1px solid #008001;
+                box-shadow: rgba(255, 255, 255, 0.298039) 0px 1px 0px 0px inset, rgb(204, 204, 204) 1px 1px 4px 0px;
+                /*
+                background: -webkit-gradient(linear, 0% 0, 0% 100%, from(#0faf0f), to(#008001));
+                     */
+            }
+
+                input[type="button"].btn_disable, input[type="button"]:visited.btn_disable {
+                    -webkit-appearance: none;
+                    background-color: #999;
+                    border: 1px solid #797979;
+                    box-shadow: rgba(255, 255, 255, 0.298039) 0px 1px 0px 0px inset, #ccc 1px 1px 4px 0px;
+                }
+
+                input[type="button"]:active {
+                    /*
+                    background: -webkit-gradient(linear, 0% 0, 0% 100%, from(#005801), to(#008001));
+                         */
+                }
+
+        .fgray {
+            color: #999;
+        }
+
+        .menu2 {
+            display: none;
+        }
+
+        label {
+            display: block;
+            height: 70px;
+            width: 100%;
+            background-color: transparent;
+            position: absolute;
+            top: 0px;
+            left: 0px;
+        }
+
+        .showorhide {
+            display: none;
+        }
+
+        .phone {
+            background: url(/content/images/phone.png) 0px no-repeat;
+            background-size: 20px;
+            display: inline-block;
+            text-indent: 20px;
+        }
+
+        .content {
+            padding: 10px;
+        }
+
+        #wrapper ul {
+            border-radius: 3px;
+            border: 1px solid #CCCAC6;
+            margin-bottom: 15px;
+            background-color: white;
+        }
+    </style>
+}
+
+<div id="wrapper">
+    <script>
+        var message = location.hash.indexOf("#flag") === -1 ? false : true;
+        var refernull = null;
+    </script>
+    <div class="header" style="@(HttpContext.Current.Request.UserAgent.Contains("kuaipinche") ?"display:none":"")">
+
+        @{
+            ViewBag.ShowBackIcon = (HttpContext.Current.Request.UrlReferrer == null ? false : true);
+        }
+
+        <span id="backbtn" class="backbtn">
+        </span>
+        @if (!ViewBag.ShowBackIcon)
+        {
+            <script>
+                refernull = true;
+            </script>
+        }
+        <div class="headertitle">拼单信息</div>
+        @if (((ViewBag.IsRequestor && Model.RequestorRole == UserRole.Driver) || (ViewBag.IsSupplier && Model.SupplierRole == UserRole.Driver)) && Model.Status == OrderStatus.PendingForPayment)
+        {
+            if (!ViewBag.IsDateClosed && Model.Status == OrderStatus.PendingForPayment)
+            {
+                <span id="menu" style="position: absolute; top: 0px; right: 0px; padding: 0px 10px; height: 35px; line-height: 35px; margin: 7px 10px; border-radius: 3px; background-color: darkgreen; border: 1px solid #2f8d13;">
+                    更多
+                </span>
+                <div id="menu2" class="menu2" style="z-index:10;background-color:green;color:white;text-align:center;width:100px; position:absolute;top:40px;right:0px;">
+                    <a onclick="showWait();" href="/order/edit/@Model.Folio.ToLower()?returnUrl=/order/detail/@Model.Folio.ToLower()" style="color:white;display:block;">修改</a>
+                </div>
+            }
+        }
+    </div><!-- navbar -->
+    @using (Html.BeginForm())
+    {
+        @Html.HiddenFor(m => m.Folio)
+        @Html.AntiForgeryToken()
+
+        <div class="content">
+            <ul>
+                <li>
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td width="23%">
+                                @if (ViewBag.IsRequestor)
+                                {
+
+                                    <span style="line-height:40px" class="fgray">
+                                        @Model.SupplierRole.GetDescription()
+                                    </span>
+
+                                }
+                                else if (ViewBag.IsSupplier)
+                                {
+                                    <span style="line-height:40px" class="fgray">@Model.RequestorRole.GetDescription()</span>
+                                }
+                            </td>
+                            <td style="line-height:30px;">
+                                @if (ViewBag.IsRequestor)
+                                {
+                                    @(!string.IsNullOrEmpty(Model.Supplier.NickName) ? @Model.Supplier.NickName : "匿名")
+                                }
+                                else if (ViewBag.IsSupplier)
+                                {
+                                    @(!string.IsNullOrEmpty(Model.Requestor.NickName) ? @Model.Requestor.NickName : "匿名")
+                                }
+
+                                @if (HttpContext.Current.User.Identity.IsAuthenticated && ViewBag.IsRegisterted)
+                                {
+                                    if (ViewBag.IsRequestor && !string.IsNullOrEmpty(Model.Supplier.Mobile))
+                                    {
+
+                                        <a href="tel://@Model.Supplier.Mobile" class="phone" style="color:rgb(51,51,51);text-decoration:none;">@Model.Supplier.Mobile</a>
+
+                                    }
+                                    else if (ViewBag.IsSupplier && !string.IsNullOrEmpty(Model.Requestor.Mobile))
+                                    {
+
+                                        <a href="tel://@Model.Requestor.Mobile" class="phone" style="color:rgb(51,51,51);text-decoration:none;">@Model.Requestor.Mobile</a>
+
+                                    }
+                                }
+                            </td>
+                        </tr>
+
+                    </table>
+                </li>
+                <li>
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td width="23%"><span style="line-height:40px" class="fgray">起点</span></td>
+                            <td>
+                                <span style="line-height:30px;">
+                                    @(string.IsNullOrEmpty(Model.Route.From_Location) ? Model.Route.From_City : (Model.Route.From_City + Model.Route.From_Location))
+                                </span>
+                            </td>
+                        </tr>
+                    </table>
+                </li>
+                <li>
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td width="23%"><span style="line-height:40px" class="fgray">终点</span></td>
+                            <td>
+                                <span style="line-height:30px;">
+                                    @(string.IsNullOrEmpty(Model.Route.To_Location) ? Model.Route.To_City : (Model.Route.To_City + Model.Route.To_Location))
+                                </span>
+                            </td>
+                        </tr>
+                    </table>
+                </li>
+                <li class="search">
+                    <span class="title fgray">发车时间</span>
+                    @(Model.StartDate.HasValue ? Model.StartDate.Value.ToString("MM月dd日 HH:mm") : "待定")
+                </li>
+                <li class="search" style="border-bottom:none;">
+                    <span class="title fgray">拼车费用</span>
+                    @(Model.Charge.HasValue ? string.Format("{0:C0} 元/人", Model.Charge.Value) : "面议")
+                </li>
+            </ul>
+
+            @if (ViewBag.ShowInsuranceLink)
+            {
+                if (string.IsNullOrEmpty(ViewBag.InsuranceFolio))
+                {
+                    <ul>
+                        <li class="search" style="border-bottom:none;background: url(/content/images/rightarrow.png) 97% no-repeat;">
+                            <a href="/insurance/create?fromurl=order_detail&returnurl=/order/detail/@Model.Folio" style="display:block;">
+                                <span style="display: inline; background-color: #cc0000; color: white; padding: 5px;">保</span>
+                                <span class="title fgray">
+                                    免费参保
+                                </span>
+                            </a>
+                        </li>
+                    </ul>
+                }
+                else
+                {
+                    <ul>
+                        <li class="search" style="border-bottom:none;background: url(/content/images/rightarrow.png) 97% no-repeat;">
+                            <a href="/insurance/detail/@ViewBag.InsuranceFolio" style="display:block;">
+                                <span style="display: inline; background-color: #cc0000; color: white; padding: 5px;">保</span>
+                                <span class="title fgray">
+                                    保单信息
+                                </span>
+                            </a>
+                        </li>
+                    </ul>
+                }
+            }
+            <ul style="border-bottom:none;">
+                <li class="divider search">
+                    <span class="title fgray">拼单状态</span><span style="color: #d00c0c">@Model.Status.GetDescription()</span>
+                </li>
+                @if ((ViewBag.IsRequestor && Model.RequestorRole == UserRole.Driver) || (ViewBag.IsSupplier && Model.SupplierRole == UserRole.Driver))
+                {
+                    <li class="search">
+                        <span style="font-weight:normal;color:gray;font-size:12px;line-height:20px;">担保交易，快拼车<span style="color:#d00c0c">不收取任何服务费用</span>，到达目的地确认后才支付给车主</span>
+                    </li>
+                }
+
+                @if (ViewBag.IsPaied != null && ViewBag.IsPaied)
+                {
+                    if (((int)ViewBag.PayMethod & (int)PaymentMethod.OnlinPay_Deposit) != 0)
+                    {
+                        <li class="search">
+                            <span class="title fgray">订金金额</span><span style="color: #d00c0c">@ViewBag.Amount_Deposit</span>
+                        </li>
+                        <li class="search">
+                            <span class="title fgray">余款金额</span><span style="color: #d00c0c">@ViewBag.Amount_Residue</span>
+                        </li>
+                    }
+                }
+            </ul>
+
+            @if (Model.Status == OrderStatus.PendingForPayment && !ViewBag.IsDateClosed && ((ViewBag.IsRequestor && Model.RequestorRole == UserRole.Passenger) || (ViewBag.IsSupplier && Model.SupplierRole == UserRole.Passenger)))
+            {
+                <h6 style="font-weight:normal;color:gray;line-height:20px;">担保交易，快拼车<span style="color:#d00c0c">不收取任何服务费用</span>，到达目的地确认后才支付给车主</h6>
+                <ul>
+                    <li class="search" style="padding:0px;">
+                        <input type="radio" id="pay_ways1" name="pay_ways" value="@((int)PaymentMethod.OnlinPay_FullCash)" @(ViewBag.PayMethod != null && ((int)ViewBag.PayMethod & (int)PaymentMethod.OnlinPay_FullCash) > 0 || ViewBag.PayMethod == null ? "checked='checked'" : "") />全额支付
+                        <input type="radio" id="pay_ways2" name="pay_ways" value="@((int)PaymentMethod.OnlinPay_Deposit)" @(ViewBag.PayMethod != null && ((int)ViewBag.PayMethod & (int)PaymentMethod.OnlinPay_Deposit) > 0 ? "checked='checked'" : "") />支付订金
+                        <input type="radio" id="pay_ways3" name="pay_ways" value="@((int)PaymentMethod.DirectPay)" @(ViewBag.PayMethod != null && (int)ViewBag.PayMethod == (int)PaymentMethod.DirectPay ? "checked='checked'" : "") />线下支付
+                    </li>
+                    <li style="line-height: 70px;padding:0px">
+                        <label for="cash1" id="cash_1"></label>
+                        <table width="100%" border="0">
+                            <tr>
+                                <td width="60px">
+                                    <input type="radio" name="cash_ways" @(ViewBag.PayMethod != null && (int)ViewBag.PayMethod == (int)PaymentMethod.DirectPay ? "disabled='disabled'" : "checked='checked'") style="margin:0px" id="cash1" value="@((int)PaymentMethod.Alipay)" />
+                                    <img src="/Content/images/zfb.png" style="vertical-align:middle" width="33" height="33" />
+                                </td>
+                                <td style="line-height:20px;">
+                                    支付宝支付<br />
+                                    <span style="display:inline;color:gray;font-size:12px;">支持信用卡、储蓄卡快捷支付及支付宝</span>
+                                </td>
+                            </tr>
+                        </table>
+                    </li>
+                    <li id="pay_show" style="border-bottom:none;">
+                        <div style="line-height:40px;">
+                            <span class="fgray title">实付金额</span><span id="way1" style="font-weight:bold;color:#d00c0c;@(ViewBag.PayMethod != null && ((int)ViewBag.PayMethod & (int)PaymentMethod.OnlinPay_FullCash) > 0 || ViewBag.PayMethod == null ? "": "display:none")">
+                                @(Model.Charge.HasValue ? string.Format("{0:C0}", Model.Charge.Value) : "面议")
+                                <b style="font-weight:normal;font-size:12px;">@(Model.Charge.HasValue ? "" : "请联系车主修改价格")</b>
+                            </span>
+                            <span id="way2" style="font-weight:bold;color: #d00c0c;@(ViewBag.PayMethod !=null && ((int)ViewBag.PayMethod & (int)PaymentMethod.OnlinPay_Deposit) > 0 ? "": "display:none")">
+                                @(Model.Charge.HasValue && Model.Charge.Value > 0 ? (Model.Charge.Value >= 10 ? Math.Round(Model.Charge.Value * 10 / 100).ToString("C0") : "￥1") : "￥5")
+                            </span>
+                            <span id="way3" style="color: #d00c0c; font-weight: bold;@(ViewBag.PayMethod !=null && (int)ViewBag.PayMethod == (int)PaymentMethod.DirectPay ? "":"display:none")">
+                                @(Model.Charge.HasValue ? string.Format("{0:C0}", Model.Charge.Value) : "面议")
+                            </span>
+                        </div>
+                    </li>
+                </ul>
+            }
+
+            <ul>
+                <li class="search">
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td width="23%"><span style="line-height:40px;" class="fgray">订单号</span></td>
+                            <td>
+                                <span style="line-height:30px;">
+                                    @Model.Folio
+                                </span>
+                            </td>
+                        </tr>
+                    </table>
+                </li>
+                <li style="border-bottom:none;">
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td style="width:23%"><span style="line-height:40px" class="fgray">拼单备注</span></td>
+                            <td>
+                                @(string.IsNullOrEmpty(Model.Note) ? "无" : Model.Note)
+                            </td>
+                        </tr>
+                    </table>
+                </li>
+                <!--
+                <li class="search">
+                    <span class="fgray">我已阅读并遵守此"<a href="javascript:show();">拼车协议</a>"</span>
+                </li>
+                    -->
+
+            </ul>
+
+            <div>
+                @if (Model.Status == OrderStatus.PendingForPayment)
+                {
+                    <div style="border:none;margin-top:10px;">
+                        @if ((ViewBag.IsRequestor && Model.RequestorRole == UserRole.Passenger) || (ViewBag.IsSupplier && Model.SupplierRole == UserRole.Passenger))
+                        {
+                            if (!ViewBag.IsDateClosed)
+                            {
+                                <input type="button" onclick="return funCancel(event);" style="width: 35%; height: 50px;font-size: 20px; border-radius: 3px;" value="取消拼单" />
+
+                                <input onclick="showWait();" type="button" id="btn_pay" @(ViewBag.PayMethod == null && !Model.Charge.HasValue || ViewBag.PayMethod != null && (int)ViewBag.PayMethod == (int)PaymentMethod.DirectPay ? "class=btn_disable" + " disabled=disabled" : "") style="float:right;width: 55%; height: 50px; font-size: 20px; border-radius:3px;" @((int)ViewBag.PayMethod == (int)PaymentMethod.DirectPay ? "disabled='disabled'" : "") value="提交拼单" />
+                            }
+                        }
+                        else
+                        {
+                            if (!ViewBag.IsDateClosed)
+                            {
+                                <input type="button" onclick="return funCancel(event);" style="width: 100%; height: 50px;  font-size: 20px; border-radius: 3px;" value="取消拼单" />
+                            }
+                        }
+                    </div>
+                }
+
+                @if ((int)Model.Status > (int)OrderStatus.PendingForPayment && (int)Model.Status < (int)OrderStatus.Completed)
+                {
+                    <div style="border:none;margin-top:10px;">
+                        @if ((ViewBag.IsRequestor && Model.RequestorRole == UserRole.Passenger) || (ViewBag.IsSupplier && Model.SupplierRole == UserRole.Passenger))
+                        {
+                            if (!ViewBag.IsDateClosed &&
+                                (
+                                    (ViewBag.IsRequestor && Model.RequestorRole == UserRole.Passenger && (!Model.IsConfirmed_Requestor.HasValue || !Model.IsConfirmed_Requestor.Value)) ||
+                                    (ViewBag.IsSupplier && Model.SupplierRole == UserRole.Passenger && (!Model.IsConfirmed_Supplier.HasValue || !Model.IsConfirmed_Supplier.Value))
+                                )
+                               )
+                            {
+                                <input type="button" onclick="return funConfirm_Passenger(event);" style="width: 100%; height: 50px; font-size: 20px; border-radius: 3px;" value="我已上车" />
+                            }
+                        }
+                        else
+                        {
+                            if (!ViewBag.IsDateClosed &&
+                                (
+                                    (ViewBag.IsRequestor && Model.RequestorRole == UserRole.Driver && (!Model.IsConfirmed_Requestor.HasValue || !Model.IsConfirmed_Requestor.Value)) ||
+                                    (ViewBag.IsSupplier && Model.SupplierRole == UserRole.Driver && (!Model.IsConfirmed_Supplier.HasValue || !Model.IsConfirmed_Supplier.Value))
+                                )
+                               )
+                            {
+                                <input type="button" onclick="return funConfirm_Driver(event);" style="width: 100%; height: 50px; font-size: 20px; border-radius: 3px;" value="我已发车" />
+                            }
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+    }
+
+    <div id="shade_bottom"></div>
+    <div id="agreement" style="background-color:white; position:absolute;z-index:1002; display:none; top:60px;border:1px solid #cacaca;margin:30px; font-size: 14px;line-height:28px;color:rgb(51,51,51);">
+        <div style="text-align:center;line-height:40px;height:40px;color:white; background:#999;letter-spacing:0.5px;">拼车协议</div>
+        <div style="overflow-y:scroll; padding:10px; height:300px;">
+            <h4>快拼车拼车协议</h4>
+            编号（订单号）：@Model.Folio<br />
+            甲方（驾驶人）：@if (Model.RequestorRole == UserRole.Driver)
+            {
+                @(!string.IsNullOrEmpty(Model.Requestor.NickName) ? @Model.Requestor.NickName : "匿名")
+
+            }
+            else if (Model.SupplierRole == UserRole.Driver)
+            {
+                @(!string.IsNullOrEmpty(Model.Supplier.NickName) ? @Model.Supplier.NickName : "匿名")
+            }    <br />
+            证件号码：                     <br />
+            紧急联系：@if (Model.RequestorRole == UserRole.Driver)
+            {
+                @Model.Requestor.Mobile
+            }
+            else if (Model.SupplierRole == UserRole.Driver)
+            {
+                @Model.Supplier.Mobile
+            }                     <br />
+            乙方（乘车人）：@if (Model.RequestorRole == UserRole.Passenger)
+            {
+                @(!string.IsNullOrEmpty(Model.Requestor.NickName) ? @Model.Requestor.NickName : "匿名")
+            }
+            else
+            {
+                @(!string.IsNullOrEmpty(Model.Supplier.NickName) ? @Model.Supplier.NickName : "匿名")
+            }<br />
+            证件号码：<br />
+            紧急联系：@if (Model.RequestorRole == UserRole.Passenger)
+            {
+                @Model.Requestor.Mobile
+
+            }
+            else if (Model.SupplierRole == UserRole.Passenger)
+            {
+                @Model.Supplier.Mobile
+            }  <br /><br />
+
+            根据国家有关法律、法规，甲、乙双方在自愿、平等的基础上，经协商一致，响应政府推动拼车、绿色出行的号召，就双方拼车事宜达成协议如下：<br />
+            <br />
+            一、拼车路程、时间、费用<br />
+            出发地：@(string.IsNullOrEmpty(Model.Route.From_Location) ? Model.Route.From_City : (Model.Route.From_City + Model.Route.From_Location))<br />
+            目的地：@(string.IsNullOrEmpty(Model.Route.To_Location) ? Model.Route.To_City : (Model.Route.To_City + Model.Route.To_Location))<br />
+            出发时间：@(Model.StartDate.HasValue ? Model.StartDate.Value.ToString("MM月dd日 HH:mm") : "待定")<br />
+            到达时间：<br />
+            拼车里程：（可选）<br />
+            摊算费用：@(Model.Charge.HasValue ? string.Format("{0:C2} 元/人", Model.Charge.Value) : "面议")<br />
+            <br />
+            二、拼车方式<br />
+            本次活动系非盈利性质，由甲方搭载乙方出行，目的是为方便群众，倡导绿色出行。<br />
+            <br />
+            三、车辆状况<br />
+            车牌号 @if (Model.SupplierRole == UserRole.Driver)
+            {
+                @Model.Supplier.LicencePlateNumber
+            }
+            else
+            {
+                @Model.Requestor.LicencePlateNumber
+            } <br />车型__________ <br />座位数 @Model.Route.SeatCount <br />空余<br />
+            <br />
+            四、义务与责任<br />
+            1、双方首次拼车应携带身份证、驾驶证、行驶证等人员和车辆证明材料，在拼车之前自行核实对方信息，避免上当受骗，如果遇特殊情况，应第一时间拨打110报警。如一方因未尽核实义务导致损失发生后，索赔不能的，应自行承担。<br />
+            2、双方均应于出发时间准时到达约定汇合地点，任何一方如有迟延导致的后果均由迟延方自行承担。甲方应遵守交通法规安全文明驾驶；乙方不得要求甲方违反交通法规驾驶，不得有危害安全驾驶的行为，否则甲方有权解除本协议，要求乙方下车，由此造成的损失，由乙方承担。<br />
+            3、如非因甲方过错发生交通事故，导致乙方人身伤亡、财产损失的，依法由责任方承担责任，甲方不承担赔偿责任，乙方不得以任何形式向甲方主张权利。<br />
+            4、如因甲方过错发生交通事故，导致乙方人身伤亡、财产损失的，根据有关法律法规，确定甲方的赔偿责任。<br />
+            5、因不可抗力（如自然灾害、地震、国家政策变化等）造成双方损失的，由双方自行承担。<br />
+            6、乙方不得携带违禁物品、易燃易爆等危险品上车，否则甲方有权解除本协议，要求乙方下车，由此造成的损失，由乙方承担。<br />
+            7、乙方应爱惜车辆，如因乙方过错致使车辆及设施受到损坏，乙方应负责赔偿。<br />
+            8、双方可以自行投保人身意外伤害保险等商业保险。<br />
+            <br />
+            五、其它条款<br />
+            1、甲、乙双方签署本协议时，应具有完全民事行为能力，对各自的权利、义务、责任清楚明白，并愿按协议约定严格执行，如一方违反本协议，另一方有权按本协议约定索赔。<br />
+            2、本协议未尽事宜，经双方协商一致可订立补充条款，本协议及其补充条款内中空格部分份填写的文字与铅印文字具有同等效力。<br />
+            3、本协议一式两份，双方各执一份，自签订日起或双方通过网络确认时生效，在拼车行为结束时，协议履行终止。<br />
+            4、甲、乙双方共同确认：本次活动发起方和本协议参考文本合同提供方，对本协议签订和履行过程中发生的一切纠纷不承担任何法律责任。<br />
+        </div>
+        <div>
+            <input id="button_agree" type="button" style="width: 100%; height: 40px; line-height: 40px;" value="同意此协议" />
+        </div>
+    </div>
+
+    @RenderPage("/Views/Shared/_Footer.cshtml")
+</div>
+
+<script type="text/javascript">
+    var _folio = "@Model.Folio";
+    var _currUserID = "@ViewBag.CurrentUserID";
+    var _requestorID = "@Model.Requestor.UserGUID";
+    var _supplierID = "@Model.Supplier.UserGUID";
+    var XianXia = "@(ViewBag.PayMethod !=null && (int)ViewBag.PayMethod == (int)PaymentMethod.DirectPay)" === "True" ? true : false;
+    var MianYi = "@(Model.Charge.HasValue)" === "False" ? true : false;
+</script>
+
+@Scripts.Render("~/bundles/order/detail")
+
+@if (!string.IsNullOrEmpty(ViewBag.ErrorMsg))
+{
+    <script type="text/javascript">
+        alert("@ViewBag.ErrorMsg");
+    </script>
+}
+
+@if (!string.IsNullOrEmpty(ViewBag.OKMsg))
+{
+    <script type="text/javascript">
+        alert("@ViewBag.OKMsg");
+    </script>
+}

@@ -1,0 +1,14 @@
+E:\KPC\V3\SNS.Apps.KPC.Libs.Models.Repositories\obj\Debug\SNS.Apps.KPC.Libs.Models.Repositories.csprojResolveAssemblyReference.cache
+E:\KPC\V3\SNS.Apps.KPC.Libs.Models.Repositories\bin\Debug\SNS.Apps.KPC.Libs.Models.Repositories.dll
+E:\KPC\V3\SNS.Apps.KPC.Libs.Models.Repositories\bin\Debug\SNS.Apps.KPC.Libs.Models.Repositories.pdb
+E:\KPC\V3\SNS.Apps.KPC.Libs.Models.Repositories\bin\Debug\SNS.Apps.KPC.Libs.Configurations.dll
+E:\KPC\V3\SNS.Apps.KPC.Libs.Models.Repositories\bin\Debug\SNS.Apps.KPC.Libs.Models.dll
+E:\KPC\V3\SNS.Apps.KPC.Libs.Models.Repositories\bin\Debug\SNS.Apps.KPC.Libs.Utils.dll
+E:\KPC\V3\SNS.Apps.KPC.Libs.Models.Repositories\bin\Debug\Newtonsoft.Json.dll
+E:\KPC\V3\SNS.Apps.KPC.Libs.Models.Repositories\bin\Debug\SNS.Apps.KPC.Libs.Configurations.pdb
+E:\KPC\V3\SNS.Apps.KPC.Libs.Models.Repositories\bin\Debug\SNS.Apps.KPC.Libs.Models.pdb
+E:\KPC\V3\SNS.Apps.KPC.Libs.Models.Repositories\bin\Debug\SNS.Apps.KPC.Libs.Utils.pdb
+E:\KPC\V3\SNS.Apps.KPC.Libs.Models.Repositories\obj\Debug\SNS.Apps.KPC.Libs.Models.Repositories.dll
+E:\KPC\V3\SNS.Apps.KPC.Libs.Models.Repositories\obj\Debug\SNS.Apps.KPC.Libs.Models.Repositories.pdb
+E:\KPC\V3\SNS.Apps.KPC.Libs.Models.Repositories\bin\Debug\SNS.Apps.KPC.Libs.Models.WeChat.dll
+E:\KPC\V3\SNS.Apps.KPC.Libs.Models.Repositories\bin\Debug\SNS.Apps.KPC.Libs.Models.WeChat.pdb

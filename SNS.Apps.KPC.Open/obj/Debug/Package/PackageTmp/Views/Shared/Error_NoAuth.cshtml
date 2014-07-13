@@ -1,0 +1,31 @@
+﻿@model System.Web.Mvc.HandleErrorInfo
+@using SNS.Apps.KPC.Libs.Configurations
+
+@{
+    ViewBag.Title = "快拼车";
+    Layout = "~/Views/Shared/_LayoutList.cshtml";
+}
+@section head{
+    @Styles.Render("~/Content/route/regandedit")
+}
+
+@RenderPage("/Views/Shared/_Navbar.cshtml")
+<div id="wrapper">
+    <div class="header">
+        <span id="navbar" class="headermenu"></span>
+        <div class="headertitle">出错啦！</div>
+    </div><!-- navbar -->
+    <div style="padding:10px; margin:10px; border:1px solid #afafaf;">
+        <p>未获得授权！</p><br />
+        <p>哎呀！得不到您的授权，小拼做不到啊！有任何疑问，请直接回复公众账号，或直接投诉 <a href="tel://@ConfigStore.CommonSettings.Official_Tel">@ConfigStore.CommonSettings.Official_Tel</a></p>
+
+        @if (!string.IsNullOrEmpty(ViewBag.AuthUrl))
+        {
+            <br />
+            <p>或者，您可以<a href="@ViewBag.AuthUrl">点我再次授权</a>！</p>
+        }
+    </div>
+</div>
+@RenderPage("/Views/Shared/_Footer.cshtml")
+
+@Scripts.Render("~/bundles/common/navbar")

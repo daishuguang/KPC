@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="00ff698d142b492fb5dcd4a309da6612" Name="Diagram1" ZoomLevel="98">
+        <EntityTypeShape EntityType="SNS.Apps.KPC.Libs.Models.DataStores.tbl_User_Rate" Width="1.5" PointX="11.375" PointY="9.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SNS.Apps.KPC.Libs.Models.DataStores.tbl_User_Route" Width="1.5" PointX="4.625" PointY="0.5" />
+        <EntityTypeShape EntityType="SNS.Apps.KPC.Libs.Models.DataStores.tbl_User_Comment" Width="1.5" PointX="11.375" PointY="7.125" />
+        <EntityTypeShape EntityType="SNS.Apps.KPC.Libs.Models.DataStores.tbl_User_Import" Width="1.5" PointX="1" PointY="13.375" />
+        <EntityTypeShape EntityType="SNS.Apps.KPC.Libs.Models.DataStores.tbl_User_Order" Width="1.5" PointX="4.625" PointY="5.25" />
+        <EntityTypeShape EntityType="SNS.Apps.KPC.Libs.Models.DataStores.tbl_Route" Width="1.5" PointX="11.375" PointY="0.5" />
+        <EntityTypeShape EntityType="SNS.Apps.KPC.Libs.Models.DataStores.tbl_User_Payment" Width="1.5" PointX="8.125" PointY="5.25" />
+        <EntityTypeShape EntityType="SNS.Apps.KPC.Libs.Models.DataStores.tbl_User" Width="1.5" PointX="1" PointY="0.5" />
+        <EntityTypeShape EntityType="SNS.Apps.KPC.Libs.Models.DataStores.tbl_Common_PhoneVerify" Width="1.5" PointX="14" PointY="0.5" />
+        <EntityTypeShape EntityType="SNS.Apps.KPC.Libs.Models.DataStores.tbl_Common_City" Width="1.5" PointX="14" PointY="5.25" />
+        <EntityTypeShape EntityType="SNS.Apps.KPC.Libs.Models.DataStores.tbl_Common_Province" Width="1.5" PointX="14" PointY="3.375" />
+        <EntityTypeShape EntityType="SNS.Apps.KPC.Libs.Models.DataStores.tbl_User_External" Width="1.5" PointX="1" PointY="8.125" />
+        <EntityTypeShape EntityType="SNS.Apps.KPC.Libs.Models.DataStores.tbl_User_Insurance" Width="1.5" PointX="4.625" PointY="9.875" />
+        <EntityTypeShape EntityType="SNS.Apps.KPC.Libs.Models.DataStores.tbl_User_Order_Insurance" Width="1.5" PointX="8.125" PointY="8.125" />
+        <EntityTypeShape EntityType="SNS.Apps.KPC.Libs.Models.DataStores.tbl_User_Promotion" Width="1.5" PointX="8.125" PointY="0.5" />
+        <EntityTypeShape EntityType="SNS.Apps.KPC.Libs.Models.DataStores.tbl_User_Track" Width="1.5" PointX="4.625" PointY="2.625" />
+        </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

@@ -1,0 +1,142 @@
+﻿@model SNS.Apps.KPC.Libs.Models.UserRegisterModel
+@using SNS.Apps.KPC.Libs.Models
+@using SNS.Apps.KPC.Libs.Configurations
+
+@{
+    if (HttpContext.Current.Request.UserAgent.Contains("kuaipinche"))
+    {
+        ViewBag.Title = "用户注册";
+    }
+    else
+    {
+        ViewBag.Title = "快拼车";
+    }
+    Layout = "~/Views/Shared/_LayoutList.cshtml";
+}
+
+@section head{
+    @Styles.Render("~/Content/route/regandedit")
+
+    <style>
+        .showPortrait {
+            width: 70px;
+            height: 70px;
+        }
+
+        #wrapper ul li {
+            border: none;
+        }
+
+        #wrapper input[type="text"], #wrapper input[type="password"] {
+            /*
+            display: flex;
+            line-height: 25px;
+            -webkit-box-flex: 1;
+            -moz-box-flex: 1;
+            -ms-flex: 1;
+            flex: 1;
+            */
+            box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            width: 100%;
+            padding: 9px;
+            -webkit-appearance: none;
+        }
+
+        .verify_able, input[type="button"], input[type="button"]:visited, .verify_able:visited {
+            background-color: #2f8d13;
+            border: 1px solid #008001;
+            box-shadow: rgba(255, 255, 255, 0.298039) 0px 1px 0px 0px inset, rgb(204, 204, 204) 1px 1px 4px 0px;
+            /*
+            background: -webkit-gradient(linear, 0% 0, 0% 100%, from(#0faf0f), to(#008001));
+                */
+        }
+
+            .verify_able:active, input[type="button"]:active {
+                /*
+                background: -webkit-gradient(linear, 0% 0, 0% 100%, from(#005801), to(#008001));
+                    */
+            }
+
+        .verify_disable {
+            background-color: #9bdb9b;
+        }
+    </style>
+}
+
+<div id="wrapper" style="min-height:300px">
+    <div class="header" style="@(HttpContext.Current.Request.UserAgent.Contains("kuaipinche") ?"display:none":"")">
+        <span id="backbtn" class="backbtn">
+        </span>
+        <div class="headertitle">用户注册</div>
+    </div><!-- navbar -->
+    @using (Html.BeginForm(new { ReturnUrl = @ViewBag.ReturnUrl }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(m => m.UserGUID)
+        @Html.HiddenFor(m => m.RefID)
+
+        <ul>
+            <li style="height: 90px; line-height: 90px; padding: 0px 10px; border-bottom: 1px solid #ccc; vertical-align: middle;">
+                <span>
+                    <a href="#" style="vertical-align: middle;" class="showPortrait"><img class="showPortrait" src="@(!string.IsNullOrEmpty(Model.PortraitsThumbUrl) ? Model.PortraitsThumbUrl : ConfigStore.CommonSettings.Portraits_ImageDefault)" /></a>
+                </span>
+            </li>
+            <li style="margin: 5px 0px;">
+                @if (ViewBag.CheckPassword)
+                {
+                    @Html.TextBoxFor(m => m.NickName, new { id = "txt_nickname", placeholder = "昵称（必填）", maxlength = "20" })
+                }
+                else
+                {
+                    @Html.TextBoxFor(m => m.NickName, new { id = "txt_nickname", placeholder = "昵称（选填）", maxlength = "20" })
+                }
+            </li>
+            <li style="margin: 5px 0px;">
+                @Html.TextBoxFor(m => m.Mobile, new { style = "width:52%;", id = "txt_mobilenum", required = "required", placeholder = "手机号（必填）", maxlength = "11" })
+                <span id="btnCode" class="verify_able" style="padding:5px 0px;display: inline-block; height: 25px; font-weight: normal; text-align:center; line-height: 25px; color: white; width: 45%;border-radius:3px;">免费发送验证码</span>
+            </li>
+            <li style="margin: 5px 0px;">
+                <input type="text" placeholder="验证码（必填）" id="txt_verifycode" name="VerifyCode" maxlength="4" />
+            </li>
+            @if (Convert.ToBoolean(ViewBag.CheckPassword))
+            {
+                <li style="margin: 5px 0px;">
+                    <input type="password" placeholder="密码（必填，至少6位）" id="txt_password1" name="Password1" maxlength="8" />
+                </li>
+
+                <li style="margin: 5px 0px;">
+                    <input type="password" placeholder="确认密码（必填，至少6位）" id="txt_password2" name="Password2" maxlength="8" />
+                </li>
+            }
+            <li style="margin: 5px 0px;">
+                @Html.TextBoxFor(model => model.WeChatID, new { id = "txt_wechatid", placeholder = "微信号/QQ号（选填）", maxlength = "20" })
+            </li>
+            @if (ViewBag.CheckRefCode && (Model.RefID == null || !Model.RefID.HasValue || Model.RefID.Value == 0))
+            {
+                <li style="margin: 5px 0px;">
+                    @Html.TextBoxFor(m => m.RefCode, new { id = "txt_refcode", placeholder = "推荐码（选填）", maxlength = "6" })
+                </li>
+            }
+            <li style="text-align:center; border-bottom:none; margin-top:10px;">
+                <input id="btn_submit" type="button" value="提交" style="border-radius:3px;  width:100%; height: 50px; color: white; text-align: center;font-size:20px;" />
+            </li>
+        </ul><!-- /main page -->
+    }
+</div>
+
+@RenderPage("/Views/Shared/_Footer.cshtml")
+
+<script>
+    var KPC = KPC || {};
+    KPC.Register = {};
+    KPC.Register.checkPassword = ("@Convert.ToBoolean(ViewBag.CheckPassword).ToString().ToLower()" == "true");
+</script>
+
+@Scripts.Render("~/bundles/user/register")
+
+@if (!string.IsNullOrEmpty(ViewBag.ErrorMsg))
+{
+    <script type="text/javascript">alert("@ViewBag.ErrorMsg");</script>
+}

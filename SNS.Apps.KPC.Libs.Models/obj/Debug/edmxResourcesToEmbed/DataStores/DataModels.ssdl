@@ -1,0 +1,374 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="SNS.Apps.KPC.Libs.Models.DataStores.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="tbl_Common_City">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="PID" Type="bigint" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="50" />
+    <Property Name="Spell" Type="nvarchar" MaxLength="50" />
+    <Property Name="OrderNo" Type="int" />
+  </EntityType>
+  <EntityType Name="tbl_Common_PhoneVerify">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Phonenum" Type="nvarchar" MaxLength="50" />
+    <Property Name="Code" Type="nvarchar" MaxLength="50" />
+    <Property Name="Channel" Type="int" />
+    <Property Name="Count" Type="int" />
+    <Property Name="Status" Type="int" />
+    <Property Name="CreateDate" Type="smalldatetime" />
+    <Property Name="UpdateDate" Type="smalldatetime" />
+  </EntityType>
+  <EntityType Name="tbl_Common_Province">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="50" />
+    <Property Name="OrderNo" Type="int" />
+  </EntityType>
+  <EntityType Name="tbl_Route">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="RouteGUID" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="RouteType" Type="int" />
+    <Property Name="From_Province" Type="nvarchar" MaxLength="50" />
+    <Property Name="From_City" Type="nvarchar" MaxLength="50" />
+    <Property Name="From_District" Type="nvarchar" MaxLength="50" />
+    <Property Name="From_Location" Type="nvarchar" MaxLength="300" />
+    <Property Name="From_Longitude" Type="float" />
+    <Property Name="From_Latitude" Type="float" />
+    <Property Name="To_Province" Type="nvarchar" MaxLength="50" />
+    <Property Name="To_City" Type="nvarchar" MaxLength="50" />
+    <Property Name="To_District" Type="nvarchar" MaxLength="50" />
+    <Property Name="To_Location" Type="nvarchar" MaxLength="300" />
+    <Property Name="To_Longitude" Type="float" />
+    <Property Name="To_Latitude" Type="float" />
+    <Property Name="StartDate" Type="smalldatetime" />
+    <Property Name="RepeatType" Type="int" />
+    <Property Name="RepeatCondition" Type="int" />
+    <Property Name="EndDate" Type="smalldatetime" />
+    <Property Name="Distance" Type="float" />
+    <Property Name="Charge" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="SeatCount" Type="int" />
+    <Property Name="Note" Type="nvarchar" MaxLength="300" />
+    <Property Name="IsExpired" Type="bit" />
+    <Property Name="IsLongTerm" Type="bit" />
+    <Property Name="Status" Type="int" />
+    <Property Name="CreateDate" Type="smalldatetime" />
+    <Property Name="UpdateDate" Type="smalldatetime" />
+  </EntityType>
+  <EntityType Name="tbl_User">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="OpenID" Type="nvarchar" MaxLength="50" />
+    <Property Name="FakeID" Type="nvarchar" MaxLength="50" />
+    <Property Name="UserGUID" Type="nvarchar" MaxLength="50" />
+    <Property Name="NickName" Type="nvarchar" MaxLength="50" />
+    <Property Name="Gender" Type="bit" />
+    <Property Name="Name" Type="nvarchar" MaxLength="50" />
+    <Property Name="IdentityNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="Birthday" Type="smalldatetime" />
+    <Property Name="Country" Type="nvarchar" MaxLength="50" />
+    <Property Name="Province" Type="nvarchar" MaxLength="50" />
+    <Property Name="City" Type="nvarchar" MaxLength="50" />
+    <Property Name="Mobile" Type="nvarchar" MaxLength="50" />
+    <Property Name="Password" Type="nvarchar" MaxLength="50" />
+    <Property Name="WeChatID" Type="nvarchar" MaxLength="50" />
+    <Property Name="QQ" Type="nvarchar" MaxLength="50" />
+    <Property Name="UserRole" Type="int" />
+    <Property Name="LicencePlateNumber" Type="nvarchar" MaxLength="50" />
+    <Property Name="PortraitsUrl" Type="nvarchar" MaxLength="300" />
+    <Property Name="PortraitsThumbUrl" Type="nvarchar" MaxLength="300" />
+    <Property Name="IsSynced" Type="bit" />
+    <Property Name="IsExtended" Type="bit" />
+    <Property Name="EnableNotify" Type="bit" />
+    <Property Name="CreateDate" Type="smalldatetime" />
+    <Property Name="UpdateDate" Type="smalldatetime" />
+    <Property Name="SubscribeDate" Type="smalldatetime" />
+    <Property Name="SubscribeCount" Type="int" />
+    <Property Name="RegisterDate" Type="smalldatetime" />
+    <Property Name="RegisterCount" Type="int" />
+    <Property Name="UnsubscribeDate" Type="smalldatetime" />
+    <Property Name="UnsubscribeCount" Type="int" />
+    <Property Name="Status" Type="int" />
+    <Property Name="RefID" Type="bigint" />
+  </EntityType>
+  <EntityType Name="tbl_User_Comment">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserID" Type="bigint" Nullable="false" />
+    <Property Name="RouteID" Type="bigint" Nullable="false" />
+    <Property Name="ScoreBy" Type="bigint" Nullable="false" />
+    <Property Name="ScoreRate" Type="int" />
+    <Property Name="Comments" Type="nvarchar" MaxLength="300" />
+    <Property Name="CreateDate" Type="smalldatetime" />
+  </EntityType>
+  <EntityType Name="tbl_User_External">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserGUID" Type="nvarchar" MaxLength="50" />
+    <Property Name="NickName" Type="nvarchar" MaxLength="50" />
+    <Property Name="Gender" Type="bit" />
+    <Property Name="Name" Type="nvarchar" MaxLength="50" />
+    <Property Name="IdentityNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="Birthday" Type="smalldatetime" />
+    <Property Name="Country" Type="nvarchar" MaxLength="50" />
+    <Property Name="Province" Type="nvarchar" MaxLength="50" />
+    <Property Name="City" Type="nvarchar" MaxLength="50" />
+    <Property Name="Mobile" Type="nvarchar" MaxLength="50" />
+    <Property Name="Password" Type="nvarchar" MaxLength="50" />
+    <Property Name="WeChatID" Type="nvarchar" MaxLength="50" />
+    <Property Name="QQ" Type="nvarchar" MaxLength="50" />
+    <Property Name="UserRole" Type="int" />
+    <Property Name="LicencePlateNumber" Type="nvarchar" MaxLength="50" />
+    <Property Name="PortraitsUrl" Type="nvarchar" MaxLength="300" />
+    <Property Name="PortraitsThumbUrl" Type="nvarchar" MaxLength="300" />
+    <Property Name="Status" Type="int" />
+    <Property Name="CreateDate" Type="smalldatetime" />
+    <Property Name="UpdateDate" Type="smalldatetime" />
+  </EntityType>
+  <EntityType Name="tbl_User_Import">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserGUID" Type="nvarchar" MaxLength="50" />
+    <Property Name="NickName" Type="nvarchar" MaxLength="50" />
+    <Property Name="Gender" Type="bit" />
+    <Property Name="Mobile" Type="nvarchar" MaxLength="50" />
+    <Property Name="UserRole" Type="int" />
+    <Property Name="PortraitsUrl" Type="nvarchar" MaxLength="300" />
+    <Property Name="PortraitsThumbUrl" Type="nvarchar" MaxLength="300" />
+    <Property Name="IsImported" Type="bit" />
+    <Property Name="CreateDate" Type="smalldatetime" />
+    <Property Name="UpdateDate" Type="smalldatetime" />
+  </EntityType>
+  <EntityType Name="tbl_User_Insurance">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="RequestorID" Type="bigint" Nullable="false" />
+    <Property Name="ICID" Type="int" Nullable="false" />
+    <Property Name="Folio" Type="nvarchar" MaxLength="50" />
+    <Property Name="InsureKey" Type="nvarchar" MaxLength="50" />
+    <Property Name="InsureNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="Province" Type="nvarchar" MaxLength="50" />
+    <Property Name="City" Type="nvarchar" MaxLength="50" />
+    <Property Name="District" Type="nvarchar" MaxLength="50" />
+    <Property Name="Location" Type="nvarchar" MaxLength="300" />
+    <Property Name="OccupationCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="ActivityCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="PresentCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="TSRCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="IssueDate" Type="smalldatetime" />
+    <Property Name="IssueMemo" Type="nvarchar" MaxLength="300" />
+    <Property Name="EffectDate" Type="smalldatetime" />
+    <Property Name="ExpireDate" Type="smalldatetime" />
+    <Property Name="Status" Type="int" />
+    <Property Name="CreateDate" Type="smalldatetime" />
+    <Property Name="UpdateDate" Type="smalldatetime" />
+  </EntityType>
+  <EntityType Name="tbl_User_Order">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Folio" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="RequestorID" Type="bigint" Nullable="false" />
+    <Property Name="RequestorRole" Type="int" Nullable="false" />
+    <Property Name="SupplierID" Type="bigint" Nullable="false" />
+    <Property Name="SupplierRole" Type="int" Nullable="false" />
+    <Property Name="RouteID" Type="bigint" Nullable="false" />
+    <Property Name="StartDate" Type="smalldatetime" />
+    <Property Name="Charge" Type="decimal" Precision="18" Scale="0" />
+    <Property Name="Note" Type="nvarchar" MaxLength="300" />
+    <Property Name="IsConfirmed_Requestor" Type="bit" />
+    <Property Name="IsConfirmed_Supplier" Type="bit" />
+    <Property Name="IsCancelled_Requestor" Type="bit" />
+    <Property Name="IsCancelled_Supplier" Type="bit" />
+    <Property Name="Status" Type="int" />
+    <Property Name="CreateDate" Type="smalldatetime" />
+    <Property Name="UpdateDate" Type="smalldatetime" />
+  </EntityType>
+  <EntityType Name="tbl_User_Order_Insurance">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserID" Type="bigint" Nullable="false" />
+    <Property Name="OrderID" Type="bigint" Nullable="false" />
+    <Property Name="InsuranceID" Type="bigint" Nullable="false" />
+    <Property Name="CreateDate" Type="smalldatetime" />
+    <Property Name="UpdateDate" Type="smalldatetime" />
+  </EntityType>
+  <EntityType Name="tbl_User_Payment">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="OrderID" Type="bigint" Nullable="false" />
+    <Property Name="PayAmount" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="PayMethod" Type="int" />
+    <Property Name="PayFolio" Type="nvarchar" MaxLength="50" />
+    <Property Name="PayStatus" Type="int" />
+    <Property Name="CreateDate" Type="smalldatetime" />
+    <Property Name="UpdateDate" Type="smalldatetime" />
+  </EntityType>
+  <EntityType Name="tbl_User_Promotion">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserID" Type="bigint" />
+    <Property Name="ChannelID" Type="bigint" />
+    <Property Name="ChannelCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="ChannelMemo" Type="nvarchar" MaxLength="300" />
+    <Property Name="CreateDate" Type="smalldatetime" />
+    <Property Name="UpdateDate" Type="smalldatetime" />
+  </EntityType>
+  <EntityType Name="tbl_User_Rate">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserID" Type="bigint" Nullable="false" />
+    <Property Name="GoodCount" Type="int" />
+    <Property Name="BadCount" Type="int" />
+    <Property Name="CreateDate" Type="smalldatetime" />
+    <Property Name="UpdateDate" Type="smalldatetime" />
+  </EntityType>
+  <EntityType Name="tbl_User_Route">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserID" Type="bigint" Nullable="false" />
+    <Property Name="UserRole" Type="int" Nullable="false" />
+    <Property Name="RouteID" Type="bigint" Nullable="false" />
+  </EntityType>
+  <EntityType Name="tbl_User_Track">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserID" Type="bigint" />
+    <Property Name="Longitude" Type="float" />
+    <Property Name="Latitude" Type="float" />
+    <Property Name="CreateDate" Type="smalldatetime" />
+    <Property Name="UpdateDate" Type="smalldatetime" />
+  </EntityType>
+  <Function Name="sp_Admin_LoadAvailableRoutes" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="dtStartDate" Type="smalldatetime" Mode="In" />
+    <Parameter Name="dtEndDate" Type="smalldatetime" Mode="In" />
+  </Function>
+  <Function Name="sp_Check_PhoneVerifyCode" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="phoneNum" Type="nvarchar" Mode="In" />
+    <Parameter Name="code" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="sp_Get_Latest_RouteID_By_UserGUID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="userGUID" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="sp_Get_PromotionCode" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="userID" Type="bigint" Mode="In" />
+    <Parameter Name="channelID" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Get_PromotionCount" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="userID" Type="bigint" Mode="In" />
+  </Function>
+  <Function Name="sp_Get_UserInsuranceFolio" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_Get_UserOrderFolio" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_Load_Available_RouteIDs" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_Load_Available_Routes" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_Load_Available_UserTracks" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="userRole" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Load_Promoters" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_Load_PromotionUsers" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="userID" Type="bigint" Mode="In" />
+    <Parameter Name="maxCount" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Load_RouteMatrix_By_RouteIDs" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="routeIDs" Type="nvarchar(max)" Mode="In" />
+  </Function>
+  <Function Name="sp_Load_UserOrder_By_UserID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="userID" Type="bigint" Mode="In" />
+    <Parameter Name="orderType" Type="int" Mode="In" />
+    <Parameter Name="orderStatus" Type="int" Mode="In" />
+    <Parameter Name="page" Type="int" Mode="In" />
+    <Parameter Name="count" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Load_UserRoute_By_RouteID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="routeID" Type="bigint" Mode="In" />
+  </Function>
+  <Function Name="sp_Load_UserRoute_By_RouteIDs" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="routeIDs" Type="nvarchar(max)" Mode="In" />
+  </Function>
+  <Function Name="sp_Load_UserRoute_By_UserID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="userID" Type="bigint" Mode="In" />
+    <Parameter Name="page" Type="int" Mode="In" />
+    <Parameter Name="count" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Load_UserRoute_Newest" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="city" Type="nvarchar" Mode="In" />
+    <Parameter Name="page" Type="int" Mode="In" />
+    <Parameter Name="count" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Load_UserRoute_Newest_Disp" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="city" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="sp_Set_PhoneVerifyCode" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="phoneNum" Type="nvarchar" Mode="In" />
+    <Parameter Name="code" Type="nvarchar" Mode="In" />
+    <Parameter Name="channel" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Set_PromotionUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="userID" Type="bigint" Mode="In" />
+    <Parameter Name="code" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Set_Route_Status" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="routeID" Type="bigint" Mode="In" />
+    <Parameter Name="status" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Set_UserTrack" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="userID" Type="bigint" Mode="In" />
+    <Parameter Name="routeID" Type="bigint" Mode="In" />
+    <Parameter Name="lng" Type="float" Mode="In" />
+    <Parameter Name="lat" Type="float" Mode="In" />
+  </Function>
+  <Function Name="sp_Sync_ExpireRoute" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="routeIDs" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="sp_Sync_UserOrder_Status" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <EntityContainer Name="SNSAppsKPCLibsModelsDataStoresStoreContainer">
+    <EntitySet Name="tbl_Common_City" EntityType="Self.tbl_Common_City" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tbl_Common_PhoneVerify" EntityType="Self.tbl_Common_PhoneVerify" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tbl_Common_Province" EntityType="Self.tbl_Common_Province" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tbl_Route" EntityType="Self.tbl_Route" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tbl_User" EntityType="Self.tbl_User" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tbl_User_Comment" EntityType="Self.tbl_User_Comment" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tbl_User_External" EntityType="Self.tbl_User_External" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tbl_User_Import" EntityType="Self.tbl_User_Import" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tbl_User_Insurance" EntityType="Self.tbl_User_Insurance" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tbl_User_Order" EntityType="Self.tbl_User_Order" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tbl_User_Order_Insurance" EntityType="Self.tbl_User_Order_Insurance" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tbl_User_Payment" EntityType="Self.tbl_User_Payment" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tbl_User_Promotion" EntityType="Self.tbl_User_Promotion" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tbl_User_Rate" EntityType="Self.tbl_User_Rate" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tbl_User_Route" EntityType="Self.tbl_User_Route" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tbl_User_Track" EntityType="Self.tbl_User_Track" Schema="dbo" store:Type="Tables" />
+  </EntityContainer>
+</Schema>

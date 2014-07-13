@@ -1,0 +1,5 @@
+E:\KPC\V3\SNS.Apps.KPC.Libs.Configurations\bin\Debug\SNS.Apps.KPC.Libs.Configurations.dll
+E:\KPC\V3\SNS.Apps.KPC.Libs.Configurations\bin\Debug\SNS.Apps.KPC.Libs.Configurations.pdb
+E:\KPC\V3\SNS.Apps.KPC.Libs.Configurations\obj\Debug\SNS.Apps.KPC.Libs.Configurations.dll
+E:\KPC\V3\SNS.Apps.KPC.Libs.Configurations\obj\Debug\SNS.Apps.KPC.Libs.Configurations.pdb
+E:\KPC\V3\SNS.Apps.KPC.Libs.Configurations\obj\Debug\SNS.Apps.KPC.Libs.Configurations.csprojResolveAssemblyReference.cache

@@ -1,0 +1,32 @@
+﻿@{
+    ViewBag.Title = "快拼车";
+    Layout = "~/Views/Shared/_LayoutList.cshtml";
+}
+@section head{
+    @Styles.Render("~/Content/route/regandedit")
+}
+
+@RenderPage("/Views/Shared/_Navbar.cshtml")
+
+
+<div id="wrapper">
+    <div class="header">
+        <span id="navbar" class="headermenu"></span>
+        <div class="headertitle">提示</div>
+    </div><!-- navbar -->
+    <div style="padding:10px; margin:10px; border:1px solid #afafaf;">
+        <h4>哎哟，小拼没有找到您任何的足迹哦，您现在可以：</h4>
+        <p style="margin:10px 0px;">请点击屏幕左下角的键盘图标，然后点击【+】图标，选择【位置】，最后点击【发送】按钮提交您的地理位置。</p>
+        <ul>
+            <li style="padding:0px;"><a style="display:block;line-height:50px;" href="/route/plaza">查看最新路线</a></li>
+            <li style="padding: 0px;"><a style="display:block;line-height:50px;" href="/route/search">去搜索路线</a></li>
+            <li style="padding: 0px;"><a style="display:block;line-height:50px;" href="/route/create">去发布路线</a></li>
+        </ul>
+    </div>
+</div>
+
+
+
+@RenderPage("/Views/Shared/_Footer.cshtml")
+
+@Scripts.Render("~/bundles/common/navbar")

@@ -1,0 +1,69 @@
+﻿@{
+    ViewBag.Title = "用户聊天记录";
+}
+
+<link href="~/easyui/themes/metro-blue/easyui.css" rel="stylesheet" />
+<link href="~/easyui/themes/icon.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-2.0.3.min.js"></script>
+<script src="~/easyui/jquery.easyui.js"></script>
+@*<script src="~/easyui/datagrid-detailview.js"></script>*@
+<script src="~/easyui/locale/easyui-lang-zh_CN.js"></script>
+<script src="~/Scripts/common/snsglobal.js"></script>
+<script>
+
+    $(document).ajaxComplete(function (event, request, settings) {
+        ConvertDateTimeInGrid("td[field='CreateDate'] div");
+    });
+
+</script>
+
+@*<div style="margin: 10px 0;"></div>*@
+<div class="easyui-layout" data-options="fit:true">
+    <div data-options="region:'north'" style="height: 50px">
+    </div>
+     <div data-options="region:'south',split:true" style="height: 50px;">
+        <div style="margin-top: 5px; text-align: center">
+            <span style="color: gray" > 快拼车系统后台<br />
+                建议使用Chrome或者FireFox浏览器浏览<br />
+               
+            </span>
+        </div>
+    </div>
+    <div data-options="region:'east',split:true,collapsed:true" title="附加信息" style="width: 180px;"></div>
+    <div data-options="region:'west',split:true" title="菜单" style="width: 150px;">
+        <ul style="list-style-type:none;padding-left:10px">
+           <li>@Html.ActionLink("路线", "Index", "Route")</li>
+            <li>@Html.ActionLink("发布路线", "PublishRoute", "Route")</li>
+            <li>@Html.ActionLink("用户微信记录", "Index", "WeChatMessage")</li>
+            <li>@Html.ActionLink("用户微信详细列表", "WeChatMessageList", "WeChatMessage")</li>
+            <li>@Html.ActionLink("订单列表", "Index", "Order")</li>
+            <li>@Html.ActionLink("系统配置", "Index", "Configuration")</li>
+        </ul>
+
+    </div>
+    <div data-options="region:'center',title:'快拼车管理中心',iconCls:'icon-ok'">
+        <div class="sns-info">
+            <div class="sns-tip icon-tip"></div>
+            <div>用户微信记录</div>
+        </div>
+
+        <table id="wechatdg" class="easyui-datagrid" 
+            data-options="toolbar:'#tb',url:'@Url.Action("GetWeChatMessagesData", "WeChatMessage")',method:'get',fitColumns:true,singleSelect:true,rownumbers:true,pagination:true" >
+            <thead>
+                <tr>
+                    <th data-options="field:'ID'" sortable="true">ID</th>
+                    <th data-options="field:'From_OpenID'" sortable="true">发起者OpenID</th>
+                    <th data-options="field:'To_OpenID',width:80" sortable="true">接受者OpenID</th>
+                    <th data-options="field:'MsgID',width:80" sortable="true">消息ID</th>
+                    <th data-options="field:'MsgType',width:80" sortable="true">消息类型</th>
+                    <th data-options="field:'MsgRenderContent', width:100" sortable="true">消息内容</th>
+                    <th data-options="field:'CreateDate'" sortable="true">创建时间</th>
+                </tr>
+            </thead>
+        </table>
+
+
+    </div>
+</div>
+
+ @Html.Partial("_OrderWorker"); 

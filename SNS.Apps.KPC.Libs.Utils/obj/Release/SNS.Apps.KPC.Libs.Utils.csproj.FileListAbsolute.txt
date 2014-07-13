@@ -1,0 +1,8 @@
+E:\KPC\V3\SNS.Apps.KPC.Libs.Utils\bin\Release\SNS.Apps.KPC.Libs.Utils.dll
+E:\KPC\V3\SNS.Apps.KPC.Libs.Utils\bin\Release\SNS.Apps.KPC.Libs.Utils.pdb
+E:\KPC\V3\SNS.Apps.KPC.Libs.Utils\bin\Release\log4net.dll
+E:\KPC\V3\SNS.Apps.KPC.Libs.Utils\bin\Release\SNS.Apps.KPC.Libs.Configurations.dll
+E:\KPC\V3\SNS.Apps.KPC.Libs.Utils\bin\Release\SNS.Apps.KPC.Libs.Configurations.pdb
+E:\KPC\V3\SNS.Apps.KPC.Libs.Utils\obj\Release\SNS.Apps.KPC.Libs.Utils.csprojResolveAssemblyReference.cache
+E:\KPC\V3\SNS.Apps.KPC.Libs.Utils\obj\Release\SNS.Apps.KPC.Libs.Utils.dll
+E:\KPC\V3\SNS.Apps.KPC.Libs.Utils\obj\Release\SNS.Apps.KPC.Libs.Utils.pdb

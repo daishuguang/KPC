@@ -1,0 +1,291 @@
+﻿@model IEnumerable<SNS.Apps.KPC.Libs.Models.RouteSearchResult>
+@using SNS.Apps.KPC.Libs.Models
+@using SNS.Apps.KPC.Libs.Configurations
+
+@{
+	Layout = "~/Views/Shared/_LayoutList.cshtml";
+    ViewBag.Title = "快拼车";
+}
+
+@section head{
+    @Styles.Render("~/Content/route/listview")
+    <style>
+        html {
+            width: 100%;
+            height: 100%;
+        }
+
+        .showPortrait {
+            width: 50px;
+            height: 50px;
+            vertical-align: middle;
+        }
+
+        #searchresult li:nth-child(2n+1) {
+            background-color: white;
+        }
+
+        ul#searchresult li a {
+            padding: 0 5px;
+        }
+
+        ul#searchresult li:active {
+            /*background-color: #efefef;*/
+            background-color: #d5d5d5;
+        }
+
+        h4 {
+            line-height: 20px;
+        }
+    </style>
+}
+
+<div id="nav" style="display:none;">
+    <ul>
+        <li><a href="/route/plaza">最新路线</a></li>
+        <li><a href="/route/search">搜索路线</a></li>
+        <li><a href="/route/create">发布路线</a></li>
+        <li><a href="/user/aroundlist">附近拼友</a></li>
+        <li><a href="/order/list">我的拼单</a></li>
+        <li><a href="/route/list">我的路线</a></li>
+        <li><a href="/user/editprofile">我的资料</a></li>
+    </ul>
+</div>
+
+<div id="wrapper" style="min-height:300px">
+    <div class="header">
+        <span id="backbtn" class="backbtn">
+        </span>
+        <div class="headertitle">搜索结果</div>
+    </div><!-- navbar -->
+    <ul id="searchresult">
+        @if (ViewBag.HasResults)
+        {
+            foreach (var item in Model)
+            {
+                <li>
+					<a onclick="showWait();" href="/route/view/@item.Route.RouteGUID#mp.weixin.qq.com" style="display:block">
+						<table style="width:100%;">
+							<tr>
+								<td style="width:50px;">
+									<img class="showPortrait" src="@(!string.IsNullOrEmpty(item.User.PortraitsThumbUrl) ? item.User.PortraitsThumbUrl : ConfigStore.CommonSettings.Portraits_ImageDefault)" />
+								</td>
+								<td>
+									<table style="width:100%;" border="0" cellpadding="0" cellspacing="0">
+										<tr style="height:30px;">
+											<td>
+												<div>
+													@*@(String.IsNullOrEmpty(item.Route.From_Location) ? item.Route.From_City : item.Route.From_City + item.Route.From_District)*@
+													@(item.Route.From_City == item.Route.To_City ? item.Route.From_District : item.Route.From_City)
+													→
+													<span style="float: right;width:45%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+														@*@(String.IsNullOrEmpty(item.Route.To_Location) ? item.Route.To_City : item.Route.To_City + item.Route.To_District)*@
+														@(item.Route.From_City == item.Route.To_City ? item.Route.To_District : item.Route.To_City)
+													</span>
+												</div>
+												<div style="line-height: 30px; font-size: 14px; color: gray;">
+													<span style="float:left;max-width:120px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+														@*@(item.Route.From_City == item.Route.To_City ? item.Route.From_Location : null)*@
+														@(item.Route.From_Location)
+													</span>
+													<span style="float:right;width:45%;white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+														@*@(item.Route.From_City == item.Route.To_City ? item.Route.To_Location : null)*@
+														@(item.Route.To_Location)
+													</span>
+												</div>
+											</td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+							<tr style="height: 30px; font-size: 14px; color: gray">
+								<td style="text-align:center;">
+									@(item.UserRole == UserRole.Driver ? "车主" : "乘客")
+								</td>
+								<td>
+									<div style="float:left;line-height:30px;">
+										@switch (item.Route.RouteType)
+										{
+											case RouteType.Citywide_Workday:
+												@(item.Route.StartDate.Value.ToString("工作日 HH:mm 出发"));
+												break;
+											case RouteType.Citywide_Weekend:
+											@(item.Route.StartDate.Value.ToString("周末 HH:mm 出发"));
+											break;
+											case RouteType.Citywide_Temp:
+											@(item.Route.StartDate.Value.ToString("MM月dd日 HH:mm 出发"));
+											break;
+											case RouteType.Citywide_EveryDay:
+											@(item.Route.StartDate.Value.ToString("每天 HH:mm 出发"));
+											break;
+											case RouteType.Intercity_Workday:
+											@("工作日 有效");
+											break;
+											case RouteType.Intercity_Weekend:
+											@("周末 有效");
+											break;
+											case RouteType.Intercity_Temp:
+											@(item.Route.StartDate.Value.ToString("MM月dd日 出发"));
+											break;
+											case RouteType.Intercity_EveryDay:
+											@("长期有效");
+											break;
+											default:
+											break;
+										}
+									</div>
+									<div style="text-align:left;float:right; width:45%;">
+										@if (item.UserRole == UserRole.Driver)
+										{
+											<h4 style="line-height:30px;">@(item.Route.Charge.HasValue ? item.Route.Charge.Value.ToString("#") + " 元/人" : "价格面议")</h4>
+										}
+									</div>
+								</td>
+							</tr>
+						</table>
+					</a>
+                </li>
+            }
+        }
+    </ul>
+    <p id="thelist" style="display: @(ViewBag.HasResults ? "none" : "block");background-color:white; padding: 10px; border-bottom: 1px solid #ccc;">
+        还没有找到顺路的人
+        <a href="/Route/Create" style="color: green; line-height: 30px; border: 1px solid #f0f0f0; display: inline-block; ">去发布路线</a>
+    </p>
+    <div id="shade" style="text-align:center;display:none">
+        <img src="~/Content/images/loading.gif" />正在加载中...
+    </div><!-- /Shade -->
+    @RenderPage("/Views/Shared/_Footer.cshtml")
+
+</div>
+
+<script>
+    var KPC = KPC || {};
+    KPC.SearchResult = {};
+</script>
+
+@if (ViewBag.HasResults)
+{
+    <script type="text/template" id="routelist_template">
+        <% _.each(datas, function(item) { %>
+        <li>
+            <a onclick="showWait();" href="/route/view/<%= item.Route.RouteGUID %>#mp.weixin.qq.com" style="display:block">
+                <table style="width:100%;">
+                    <tr>
+                        <td style="width:50px;">
+                            <img width="50" height="50" style="vertical-align:middle;" src="<%= item.User.PortraitsThumbUrl === null ? '/Content/portraits/default.jpg': item.User.PortraitsThumbUrl %>" />
+                        </td>
+                        <td>
+                            <table style="width:100%;" border="0" cellpadding="0" cellspacing="0">
+                                <tr style="height:30px;">
+                                    <td>
+                                        <div>
+                                            @*<%= item.Route.From_Location === null ? item.Route.From_City : item.Route.From_City + item.Route.From_District %>*@
+                                            <%= item.Route.From_City === item.Route.To_City ? item.Route.From_District : item.Route.From_City %>
+                                            →
+                                            <span style="float: right;width:45%;">
+                                                @*<%= item.Route.To_Location===null ? item.Route.To_City : item.Route.To_City + item.Route.To_District %>*@
+                                                <%= item.Route.From_City === item.Route.To_City ? item.Route.To_District : item.Route.To_City %>
+                                            </span>
+                                        </div>
+                                        <div style="line-height: 30px;font-size: 14px;color:gray;">
+                                            <span style="float:left;max-width:120px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+                                                @*<%= (item.Route.From_City === item.Route.To_City ? item.Route.From_Location:null) %>*@
+                                                <%= item.Route.From_Location %>
+                                            </span>
+                                            <span style="width: 45%; text-align: left; float: right; /*max-width:120px;*/ white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                                @*<%= (item.Route.From_City === item.Route.To_City ? item.Route.To_Location : null) %>*@
+                                                <%= item.Route.To_Location %>
+                                            </span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr style="height: 30px; font-size: 14px; color: gray">
+                        <td style="text-align:center">
+                            <%= item.UserRole === 1 ? "车主":"乘客" %>
+                        </td>
+                        <td>
+                            <div style="float:left;line-height:30px;">
+                                <% switch(item.Route.RouteType) { case 17: %>
+								<% var len = item.Route.StartDate.length, datestring = item.Route.StartDate.substring(6, len-2); dateobj =new Date(parseInt(datestring)); %>
+                                工作日
+                                <%= dateobj.getHours() < 10 ? '0' + dateobj.getHours() : dateobj.getHours() %>:<%= dateobj.getMinutes() < 10 ? '0' + dateobj.getMinutes() : dateobj.getMinutes() %>
+                                出发
+                                <% break; case 18: %>
+								<% var len = item.Route.StartDate.length, datestring = item.Route.StartDate.substring(6, len-2); dateobj =new Date(parseInt(datestring)); %>
+                                周末
+                                <%= dateobj.getHours() < 10 ? '0' + dateobj.getHours() : dateobj.getHours() %>:<%= dateobj.getMinutes() < 10 ? '0' + dateobj.getMinutes() : dateobj.getMinutes() %>
+                                出发
+                                <% break; case 20: %>
+								<% var len = item.Route.StartDate.length, datestring = item.Route.StartDate.substring(6, len-2); dateobj =new Date(parseInt(datestring)); %>
+                                <%= dateobj.getMonth() + 1 < 10 ? '0' + (dateobj.getMonth() + 1) : dateobj.getMonth() + 1 %>月<%= dateobj.getDate() < 10 ? '0' + dateobj.getDate() : dateobj.getDate() %>日
+
+                                <%= dateobj.getHours() < 10 ? '0' + dateobj.getHours() : dateobj.getHours() %>:<%= dateobj.getMinutes() < 10 ? '0' + dateobj.getMinutes() : dateobj.getMinutes() %>
+                                出发
+                                <% break; case 24: %>
+								<% var len = item.Route.StartDate.length, datestring = item.Route.StartDate.substring(6, len-2); dateobj =new Date(parseInt(datestring)); %>
+                                每天
+                                <%= dateobj.getHours() < 10 ? '0' + dateobj.getHours() : dateobj.getHours() %>:<%= dateobj.getMinutes() < 10 ? '0' + dateobj.getMinutes() : dateobj.getMinutes() %>
+                                出发
+                                <% break; case 33: %>
+                                工作日 有效
+                                <% break; case 34: %>
+                                周末 有效
+                                <% break; case 36: %>
+								<% var len = item.Route.StartDate.length, datestring = item.Route.StartDate.substring(6, len-2); dateobj =new Date(parseInt(datestring)); %>
+                                <%= dateobj.getMonth() + 1 < 10 ? '0' + (dateobj.getMonth() + 1) : dateobj.getMonth() + 1 %>月<%= dateobj.getDate() < 10 ? '0' + dateobj.getDate() : dateobj.getDate() %>日
+                                出发
+                                <% break;  case 40: %>
+                                长期有效
+                                <% break; default: break;%>
+                                <% }%>
+    
+                                @*<% if(item.Route.RouteType === 1 || item.Route.RouteType === 3) {%>
+                                <% if(item.Route.IsLongTerm === true){%>
+                                长期有效
+                                <%}else {%>
+                                <%= dateobj.getMonth() + 1 < 10 ? '0' + (dateobj.getMonth() + 1) : dateobj.getMonth() + 1 %>月<%= dateobj.getDate() < 10 ? '0' + dateobj.getDate() : dateobj.getDate() %>日
+                                出发
+                                <% } %>
+                                <% } else{%>
+                                每天
+                                <%= dateobj.getHours() < 10 ? '0' + dateobj.getHours() : dateobj.getHours() %>:<%= dateobj.getMinutes() < 10 ? '0' + dateobj.getMinutes() : dateobj.getMinutes() %>
+                                出发
+                                <% } %>*@
+
+                            </div>
+                            <div style="float:right;width:45%;">
+                                <% if(item.UserRole === 1) {%>
+                                <h4 style="line-height:30px;"><%= item.Route.Charge !== null ? item.Route.Charge + " 元/人" : "价格面议" %></h4>
+                                <% } %>
+                            </div>
+                    </tr>
+                </table>
+            </a>
+        </li>
+        <% }); %>
+    </script>
+    <script>
+        KPC.SearchResult.RouteInfo = "from_lat=" + "@(ViewBag.SearchFilter.from_lat)" +
+            "&from_lng=" + "@ViewBag.SearchFilter.from_lng" +
+            "&from_province=" + "@ViewBag.SearchFilter.from_province" +
+            "&from_city=" + "@ViewBag.SearchFilter.from_city" +
+            "&from_district=" + "@ViewBag.SearchFilter.from_district" +
+            "&from_location=" + "@ViewBag.SearchFilter.from_location" +
+            "&to_lat=" + "@ViewBag.SearchFilter.to_lat" +
+            "&to_lng=" + "@ViewBag.SearchFilter.to_lng" +
+            "&to_province=" + "@ViewBag.SearchFilter.to_province" +
+            "&to_city=" + "@ViewBag.SearchFilter.to_city" +
+            "&to_district=" + "@ViewBag.SearchFilter.to_district" +
+            "&to_location=" + "@ViewBag.SearchFilter.to_location" +
+            "&userrole=" + "@ViewBag.SearchFilter.userrole" +
+            "&ptype=" + "@ViewBag.SearchFilter.ptype" +
+            "&pdate=" + "@ViewBag.SearchFilter.pdate" +
+            "&pcon=" + "@ViewBag.SearchFilter.pcon" +
+            "&pcon2=" + "@ViewBag.SearchFilter.pcon2";
+    </script>
+}
+@Scripts.Render("~/bundles/route/searchresult")

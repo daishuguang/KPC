@@ -1,0 +1,102 @@
+﻿@model SNS.Apps.KPC.Admin.ViewModels.SNSEntityJsonViewModel<SNS.Apps.KPC.Admin.ViewModels.WeChatMessageAndUserViewModel>
+
+<script>
+    var isExpended = false;
+    $().ready(function () {
+        $('.userroutelink').on('click', function () {
+            var uid = $(this).attr('uid');
+            if (!isExpended) {
+                $('#ccmain').layout('expand', 'east');
+                isExpended = true;
+            }
+            $('#dgUserRoute').datagrid({
+                url: '/route/SearchRoutesData?uid=' + uid,
+                //fitColumns: true,
+                method: 'get',
+                pagination: true,
+                columns: [[
+                    { field: 'PublisherID', width: 40, sortable: true, title: '用户ID' },
+                    { field: 'PublisherMobile', sortable: true, title: '用户手机号' },
+                    {
+                        field: 'PublisherRoleType', sortable: true, title: '用户类型',
+                        formatter: function (value, row, index) {
+                            if (value == 0) {
+                                return "乘客"
+                            } else {
+                                return "司机";
+                            }
+                        }
+                    },
+                    {
+                        field: 'RouteType', title: '路线类型', sortable: true, width: 40,
+                        formatter: function (value, row, index) {
+                            if (value == 0) {
+                                return "上下班"
+                            } else {
+                                return "长途";
+                            }
+                        }
+                    },
+                    { field: 'From_Location', sortable: true, title: '起点', width: 100 },
+                    { field: 'To_Location', sortable: true, title: '终点', width: 100 },
+                    {
+                        field: 'StartDate', sortable: true, title: '出发时间', width: 100,
+                        formatter: function (value, row, index) {
+                            if (value == "" || value == undefined)
+                                return "";
+                            var date = ConvertJSONDateToJSDateObject(value);
+                            var formattedDate = getDateTime(date);
+                            return formattedDate;
+                        }
+                    },
+                    {
+                        field: 'CreateDate', sortable: true, title: "创建时间", width: 100,
+                        formatter: function (value, row, index) {
+                            if (value == "" || value == undefined)
+                                return "";
+                            var date = ConvertJSONDateToJSDateObject(value);
+                            var formattedDate = getDateTime(date);
+                            return formattedDate;
+                        }
+                    }
+                ]]
+            });
+        });
+    });
+</script>
+
+<div id="msgList" class="easyui-accordion" data-options="multiple:true" style="width: auto">
+    @foreach (var item in Model.rows)
+    {
+        <div title="@string.Format("{0} ({1})", item.NickName, item.City)" data-options="collapsed:false" style="padding: 10px;">
+            <table>
+                <tr>
+                    <td rowspan="3" style="width: 60px">
+                        <img src="~/Content/img/kuai.gif" />
+                    </td>
+                    <td class="dv-label"></td>
+                    <td></td>
+                    <td class="dv-label"></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="dv-label">@*消息类型*@ </td>
+                    <td>@*@item.MsgTypeString*@</td>
+                    <td class="dv-label">@*创建时间*@ </td>
+                    <td>@*@item.CreateDate*@</td>
+                </tr>
+                <tr>
+                    <td class="dv-label" colspan="3">消息内容: </td>
+                    <td>
+                        <textarea cols="50" readonly>@item.MsgRenderContent</textarea><br />
+                        <a href="javascript:void(0)" uid="@item.UserID" class="easyui-linkbutton userroutelink" style="float: right">他的路线</a>
+                    </td>
+                </tr>
+            </table>
+            <div style="float: right">@item.CreateDate</div>
+
+        </div>
+    }
+</div>
+<input class="totals" type="hidden" value="@Model.total" />
+

@@ -1,0 +1,9 @@
+﻿@{
+    ViewBag.Title = "快拼车";
+    Layout = "~/Views/Shared/_LayoutList.cshtml";
+}
+@section head{
+    <script>
+        location.replace(location.protocol + "//" + location.host + "/order/detail/" + "@ViewBag.URL");
+    </script>
+}

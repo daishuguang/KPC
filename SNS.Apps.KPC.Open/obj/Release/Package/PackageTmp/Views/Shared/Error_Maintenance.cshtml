@@ -1,0 +1,24 @@
+﻿@model System.Web.Mvc.HandleErrorInfo
+@using SNS.Apps.KPC.Libs.Configurations
+
+@{
+    ViewBag.Title = "快拼车";
+    Layout = "~/Views/Shared/_LayoutList.cshtml";
+}
+@section head{
+    @Styles.Render("~/Content/route/regandedit")
+}
+
+@RenderPage("/Views/Shared/_Navbar.cshtml")
+<div id="wrapper">
+    <div class="header">
+        <span id="navbar" class="headermenu"></span>
+        <div class="headertitle">系统正在维护ing</div>
+    </div><!-- navbar -->
+    <div style="padding:10px; margin:10px; border:1px solid #afafaf;">
+        很抱歉，现在是小拼的维护升级时间啦，30分钟之后我就会回来的！如果您有任何疑问或问题，可以在工作时间致电 <a href="tel://@ConfigStore.CommonSettings.Official_Tel">@ConfigStore.CommonSettings.Official_Tel</a>
+    </div>
+</div>
+@RenderPage("/Views/Shared/_Footer.cshtml")
+
+@Scripts.Render("~/bundles/common/navbar")

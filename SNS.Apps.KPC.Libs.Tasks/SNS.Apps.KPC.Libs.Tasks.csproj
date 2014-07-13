@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{053B405D-CA29-4850-AB18-2678499D747F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SNS.Apps.KPC.Libs.Tasks</RootNamespace>
+    <AssemblyName>SNS.Apps.KPC.Libs.Tasks</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Dlls\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net, Version=1.2.12.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Dlls\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Interfaces\ITask.cs" />
+    <Compile Include="Interfaces\TaskBase.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UserInsuranceMaintainTask.cs" />
+    <Compile Include="UserOrderMaintainTask.cs" />
+    <Compile Include="RouteMatrixMaintainTask.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SNS.Apps.KPC.Libs.Configurations\SNS.Apps.KPC.Libs.Configurations.csproj">
+      <Project>{64876bc5-0f52-457b-9c5f-613532887c02}</Project>
+      <Name>SNS.Apps.KPC.Libs.Configurations</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SNS.Apps.KPC.Libs.Models.Repositories\SNS.Apps.KPC.Libs.Models.Repositories.csproj">
+      <Project>{c95c923e-74ab-4db5-b740-5e925444f2e5}</Project>
+      <Name>SNS.Apps.KPC.Libs.Models.Repositories</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SNS.Apps.KPC.Libs.Models\SNS.Apps.KPC.Libs.Models.csproj">
+      <Project>{816d4429-e7d1-4ccb-b77b-6cceebd1b846}</Project>
+      <Name>SNS.Apps.KPC.Libs.Models</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SNS.Apps.KPC.Libs.Utils\SNS.Apps.KPC.Libs.Utils.csproj">
+      <Project>{7899de2b-4fb4-40cc-bc76-28f854fb5004}</Project>
+      <Name>SNS.Apps.KPC.Libs.Utils</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
