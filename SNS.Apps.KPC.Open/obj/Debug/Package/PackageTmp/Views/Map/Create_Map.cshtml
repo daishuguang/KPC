@@ -1,9 +1,0 @@
-﻿@{
-    ViewBag.Title = "Map";
-    Layout = "~/Views/Shared/_LayoutPage_Map.cshtml";
-}
-<div id="div_location" style="position: absolute; top: 0; padding: 0.7em; width: 100%; background-color: black; opacity: 0.6; filter: alpha(opacity=60); text-align: center; color: white; left: 0; z-index: 10">请在地图上点选</div>
-<div id="map_canvas"></div>
-@section Scripts{
-    @Scripts.Render("~/bundles/map/createmap")
-}

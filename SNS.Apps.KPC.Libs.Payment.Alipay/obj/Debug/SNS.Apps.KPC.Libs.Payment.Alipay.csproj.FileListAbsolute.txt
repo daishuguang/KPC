@@ -1,5 +1,0 @@
-E:\KPC\V3\SNS.Apps.KPC.Libs.Payment.Alipay\bin\Debug\SNS.Apps.KPC.Libs.Payment.dll
-E:\KPC\V3\SNS.Apps.KPC.Libs.Payment.Alipay\bin\Debug\SNS.Apps.KPC.Libs.Payment.pdb
-E:\KPC\V3\SNS.Apps.KPC.Libs.Payment.Alipay\obj\Debug\SNS.Apps.KPC.Libs.Payment.dll
-E:\KPC\V3\SNS.Apps.KPC.Libs.Payment.Alipay\obj\Debug\SNS.Apps.KPC.Libs.Payment.pdb
-E:\KPC\V3\SNS.Apps.KPC.Libs.Payment.Alipay\obj\Debug\SNS.Apps.KPC.Libs.Payment.Alipay.csprojResolveAssemblyReference.cache

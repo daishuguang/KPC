@@ -1,5 +1,0 @@
-E:\KPC\V3\SNS.Apps.KPC.Libs.Configurations\bin\Release\SNS.Apps.KPC.Libs.Configurations.dll
-E:\KPC\V3\SNS.Apps.KPC.Libs.Configurations\bin\Release\SNS.Apps.KPC.Libs.Configurations.pdb
-E:\KPC\V3\SNS.Apps.KPC.Libs.Configurations\obj\Release\SNS.Apps.KPC.Libs.Configurations.csprojResolveAssemblyReference.cache
-E:\KPC\V3\SNS.Apps.KPC.Libs.Configurations\obj\Release\SNS.Apps.KPC.Libs.Configurations.dll
-E:\KPC\V3\SNS.Apps.KPC.Libs.Configurations\obj\Release\SNS.Apps.KPC.Libs.Configurations.pdb
